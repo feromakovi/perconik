@@ -1,7 +1,6 @@
 package sk.stuba.fiit.programmerproportion.handlers;
 
 import java.io.File;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -41,7 +40,6 @@ public class AuthorsHandler extends AbstractHandler{
 //	    	Repository repo = GitRepositories.fromProject(projectRes);
 //	    	String branch = GitRepositories.getBranch(repo);
 //	    	System.out.println("Currently working branch is: " + branch);
-	    	
 	    } else {
 	      MessageDialog.openInformation(shell, "Info",
 	          "Please select a Java source file");
