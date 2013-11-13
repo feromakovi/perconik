@@ -19,4 +19,6 @@ Import-Package: org.eclipse.core.commands,
  org.eclipse.swt.widgets,
  org.eclipse.ui,
  org.eclipse.ui.commands,
- org.eclipse.ui.handlers
+ org.eclipse.ui.handlers,
+ sk.stuba.fiit.perconik.core.java.dom,
+ sk.stuba.fiit.perconik.utilities.function
