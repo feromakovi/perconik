@@ -5,7 +5,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.google.common.io.Files;
 
 public final class SourceCode {
