@@ -6,7 +6,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -15,10 +14,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-
 import sk.stuba.fiit.perconik.eclipse.jgit.lib.GitRepositories;
 import sk.stuba.fiit.programmerproportion.files.FileFinder;
-import sk.stuba.fiit.programmerproportion.files.FileFinder.FileFinderListener;
 
 public class AuthorsHandler extends AbstractHandler{
 
@@ -33,17 +30,23 @@ public class AuthorsHandler extends AbstractHandler{
 	    if (structuredSelection != null && structuredSelection.getFirstElement() instanceof IJavaProject) {
 	    	IJavaProject javaProject = (IJavaProject) structuredSelection.getFirstElement();
 	    	IProject projectRes = javaProject.getProject();
+	    	Repository repo = setupRepository(projectRes);
 	    	FileFinder ff = new FileFinder(FileFinder.PATTERN_JAVA);
-	    	SourceFileHandler sourceFile = new SourceFileHandler();
+	    	SourceFileHandler sourceFile = new SourceFileHandler(repo);
 	    	ff.setFileFinderListener(sourceFile);
 	    	ff.find(new File(projectRes.getLocationURI().getPath()));
-//	    	Repository repo = GitRepositories.fromProject(projectRes);
-//	    	String branch = GitRepositories.getBranch(repo);
-//	    	System.out.println("Currently working branch is: " + branch);
 	    } else {
 	      MessageDialog.openInformation(shell, "Info",
 	          "Please select a Java source file");
 	    }
 	    return null;
 	  }
+
+	private Repository setupRepository(IProject projectRes) {
+		Repository repo = GitRepositories.fromProject(projectRes);
+		String branch = GitRepositories.getBranch(repo);
+		if(!"master".equalsIgnoreCase(branch))
+			GitRepositories.switchBranch(repo, "master");
+		return repo;
+	}
 }
