@@ -31,7 +31,7 @@ public final class SourceFileHandler implements FileFinderListener{
 	public void onFileFind(final File file) {
 		System.out.println("=========================" + file.getName() + "=========================");
 		final String relativePath = Strings.makeRelativePath(this.mRepository.getWorkTree().getAbsolutePath(), file.getAbsolutePath());
-		Iterator<RevCommit> revisions = GitRepositories.getLogFile(mRepository, relativePath);
+		Iterator<RevCommit> revisions = GitRepositories.getFileLog(mRepository, relativePath).iterator();
 		if(revisions.hasNext()){
 			//snapshot of current project
 			RevCommit commit = revisions.next();
@@ -47,7 +47,7 @@ public final class SourceFileHandler implements FileFinderListener{
 			List<ReferMethod> referMethods = getReferMethods(file.getAbsolutePath(), commit.getCommitTime(), commit.getCommitterIdent().getEmailAddress());
 			DataProvider.getInstance().update(referMethods);
 		}	
-		GitRepositories.checkoutFileToHEAD(mRepository, relativePath);
+		GitRepositories.checkoutFileToHead(mRepository, relativePath);
 	}
 	
 	private List<ReferMethod> getReferMethods(final String absolutePath, final long time, final String author){
