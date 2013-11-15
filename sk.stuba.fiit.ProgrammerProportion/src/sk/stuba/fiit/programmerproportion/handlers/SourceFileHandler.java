@@ -46,7 +46,8 @@ public final class SourceFileHandler implements FileFinderListener{
 			GitRepositories.checkoutFile(mRepository, relativePath, commit);
 			List<ReferMethod> referMethods = getReferMethods(file.getAbsolutePath(), commit.getCommitTime(), commit.getCommitterIdent().getEmailAddress());
 			DataProvider.getInstance().update(referMethods);
-		}				
+		}	
+		GitRepositories.checkoutFileToHEAD(mRepository, relativePath);
 	}
 	
 	private List<ReferMethod> getReferMethods(final String absolutePath, final long time, final String author){
