@@ -17,13 +17,13 @@ public final class SourceCode {
 			if(lines != null && lines.length > 0)
 				for(String line : lines)
 					if(isValidLineOfCode(line))
-						validLines.add(normalizeLineOfCode(line));
+						validLines.add(line);
 		}
 		return validLines;
 	}
 	
-	private static final String normalizeLineOfCode(String line){
-		return line;
+	public static final String normalizeCode(String line){
+		return line.replaceAll("\\s", "");
 	}
 	
 	private static final boolean isValidLineOfCode(String line){
