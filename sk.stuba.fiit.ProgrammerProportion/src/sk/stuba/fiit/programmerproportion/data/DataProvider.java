@@ -1,6 +1,7 @@
 package sk.stuba.fiit.programmerproportion.data;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import sk.stuba.fiit.programmerproportion.models.ReferMethod;
 
 public final class DataProvider {
 	
-	private final Map<String,ReferMethod> mMethods = new HashMap<String,ReferMethod>();
+	private final Map<String, HashMap<String, ReferMethod>> mMethods = new HashMap<String,HashMap<String,ReferMethod>>();//mapping path to hashmap of method representation and method
 
 	private static final DataProvider INSTANCE = new DataProvider();
 	
@@ -18,16 +19,46 @@ public final class DataProvider {
 	
 	public void update(final List<ReferMethod> methods){
 		for(ReferMethod m : methods){
-			System.out.println("method.toString()  "+ m.toString());
-			if(this.mMethods.containsKey(m.getStringRepresentation())){
-				ReferMethod selected = this.mMethods.get(m.getStringRepresentation());
-				selected.updateLineAuthors(m.getLines());
-			}
+			final Map<String, ReferMethod> refs = getMethodsForFile(m.getPath());
+			if(refs != null){
+				if(refs.containsKey(m.getStringRepresentation())){
+					ReferMethod selected = refs.get(m.getStringRepresentation());
+					selected.updateLineAuthors(m.getLines());
+				}
+			}			
 		}
 	}
 	
 	public void insert(final List<ReferMethod> methods){
-		for(ReferMethod m : methods)
-			this.mMethods.put(m.getStringRepresentation(), m);
+		for(ReferMethod m : methods){
+			final Map<String, ReferMethod> refs = getMethodsForFile(m.getPath());
+			if(refs != null)
+				refs.put(m.getStringRepresentation(), m);
+		}
+	}
+	
+	private Map<String,ReferMethod> getMethodsForFile(String filePath){
+		if(!this.mMethods.containsKey(filePath))
+			this.mMethods.put(filePath, new HashMap<String,ReferMethod>());
+		return this.mMethods.get(filePath);
+	}
+	
+	@Override
+	public String toString() {
+		String value = new String();
+		Iterator<String> files = this.mMethods.keySet().iterator();
+		while(files.hasNext()){
+			final String file = files.next();
+			final Map<String,ReferMethod> refs = getMethodsForFile(file);
+			if(refs != null){
+				value += "############################ File - " + file + "############################" + "\n";
+				Iterator<ReferMethod> methods = refs.values().iterator();
+				while(methods.hasNext()){
+					value += methods.next().toString();
+				}
+			}
+			value += "\n";
+		}
+		return value;
 	}
 }
