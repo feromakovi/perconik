@@ -1,5 +1,7 @@
 package sk.stuba.fiit.programmerproportion.models;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,7 +33,7 @@ public class ReferMethod extends AbstractReferCode{
 		while(lineIterator.hasNext()){
 			ReferLine newLine = lineIterator.next();
 			if(this.mLines.containsKey(newLine.getStringRepresentation()))
-				this.mLines.get(newLine.getStringRepresentation()).setAuthor(newLine.getAuthor());
+				this.mLines.get(newLine.getStringRepresentation()).update(newLine.getAuthor(), newLine.getTime());;
 		}
 	}
 	
@@ -66,15 +68,19 @@ public class ReferMethod extends AbstractReferCode{
 
 	@Override
 	public String getStringRepresentation() {
-		return SourceCode.normalizeCode(this.mPath + this.mNames.iterator().next());
+		return SourceCode.normalizeCode(this.mPath + "-" + this.mNames.iterator().next());
 	}
 	
 	@Override
 	public String toString() {
-		String o = new String("methodName: " + this.mNames.iterator().next() + "\n");
+		String o = new String("  Method: " + this.mNames.iterator().next() + "\n");
 		Iterator<ReferLine> lns = this.getLines();
+		final List<ReferLine> sortedLines = new ArrayList<ReferLine>();
 		while(lns.hasNext())
-			o += "		" + lns.next().toString() + "\n";
+			sortedLines.add(lns.next());
+		Collections.sort(sortedLines);
+		for(ReferLine l : sortedLines)
+			o += "    " + l.toString() + "\n";
 		return o;
 	}
 }
