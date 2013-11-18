@@ -7,7 +7,7 @@
             locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
          <command
                commandId="sk.stuba.fiit.programmerproportion.handle"
-               label="Specify Authors"
+               label="Assign Authors"
                style="push">
             <visibleWhen
                   checkEnabled="false">
