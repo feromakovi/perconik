@@ -43,6 +43,22 @@ public final class DataProvider {
 		return this.mMethods.get(filePath);
 	}
 	
+	public void iterate(IterationListener listener){
+		if(listener == null)
+			throw new NullPointerException("IterationListener isntance is null");
+		
+		Iterator<HashMap<String, ReferMethod>> fileIterator = this.mMethods.values().iterator();
+		while(fileIterator.hasNext()){
+			Iterator<ReferMethod> methodIterator = fileIterator.next().values().iterator();
+			while(methodIterator.hasNext())
+				listener.onIterate(methodIterator.next());
+		}
+	}
+	
+	public static interface IterationListener{
+		public void onIterate(ReferMethod method);
+	}
+	
 	@Override
 	public String toString() {
 		String value = new String();
