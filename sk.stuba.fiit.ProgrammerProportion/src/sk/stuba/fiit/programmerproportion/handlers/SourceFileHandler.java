@@ -54,9 +54,11 @@ public final class SourceFileHandler implements FileFinderListener{
 			if(md.getBody() != null){
 				String codeBlock = md.getBody().toString();
 				ReferMethod rm = new ReferMethod(md.getName().toString(), codeBlock, absolutePath);
-				List<String> lines = SourceCode.parseLines(codeBlock);
-				rm.setLines(lines, time, author);
-				referMethods.add(rm);
+				if(rm.isValid()){
+					List<String> lines = SourceCode.parseLines(codeBlock);
+					rm.setLines(lines, time, author);
+					referMethods.add(rm);
+				}
 			}				
 		}
 		return referMethods;
