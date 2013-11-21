@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
-public class MethodDataHolder {
+public final class MethodDataHolder {
 
 	private final MethodDeclaration mMethodDeclaration;
 	private final List<MethodInvocation> mInvocations = new ArrayList<MethodInvocation>();

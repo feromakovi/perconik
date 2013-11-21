@@ -27,6 +27,10 @@ public final class InvokedMethod extends AbstractReferCode{
 		return im;
 	}
 	
+	public String getName(){
+		return this.mName;
+	}
+	
 	public String getPath(){
 		return Strings.representationOf(mPackage, mClass);
 	}
