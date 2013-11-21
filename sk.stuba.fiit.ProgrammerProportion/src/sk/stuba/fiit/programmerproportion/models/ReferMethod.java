@@ -17,7 +17,7 @@ public final class ReferMethod extends AbstractReferCode{
 
 	private final String mName;
 	private final Map<String,ReferLine> mLines = new HashMap<String,ReferLine>();
-	private final Map<String,MethodInvocation> mInvocatedMethods = new HashMap<String,MethodInvocation>();
+	private final List<InvokedMethod> mInvocatedMethods = new ArrayList<InvokedMethod>();
 	private final String mClass;
 	private final String mPackage;
 	private final double mComplexity;
@@ -30,13 +30,13 @@ public final class ReferMethod extends AbstractReferCode{
 		this.mPackage = mpackage;
 		this.mComplexity = this.onCalculateComplexity(codeBlock);
 		for(MethodInvocation m : iMethods){
-			String key = Strings.representationOf(m.resolveMethodBinding());	
-			if(key != null)
-				mInvocatedMethods.put(key, m);
+			InvokedMethod im = InvokedMethod.from(m);
+			if(im != null)
+				mInvocatedMethods.add(im);
 		}
 	}
 	
-	public static ReferMethod fromMethodDeclaration(final MethodDeclaration method, final List<MethodInvocation> iMethods){
+	public static ReferMethod from(final MethodDeclaration method, final List<MethodInvocation> iMethods){
 		String name = method.getName().toString();
 		String code = method.getBody().toString();
 		ITypeBinding mclass;

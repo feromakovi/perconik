@@ -50,7 +50,7 @@ public final class SourceFileHandler implements JavaUnitListener{
 		for(MethodDataHolder mdh : methodHolders){
 			MethodDeclaration md = mdh.getMethodDeclaration();
 			if(md.getBody() != null){
-				ReferMethod rm = ReferMethod.fromMethodDeclaration(md, mdh.getInvocatedMethods());
+				ReferMethod rm = ReferMethod.from(md, mdh.getInvocatedMethods());
 				if(rm != null && rm.isValid()){
 					List<String> lines = SourceCode.parseLines(md.getBody().toString());
 					rm.setLines(lines, time, author);
