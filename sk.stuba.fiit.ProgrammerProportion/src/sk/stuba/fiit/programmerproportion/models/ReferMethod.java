@@ -80,6 +80,18 @@ public final class ReferMethod extends AbstractReferCode{
 		return this.mLines.values().iterator();
 	}
 	
+	/**
+	 * Simple getter of List of methods, which are invoked
+	 * from body of this method.
+	 *  
+	 * @return
+	 * 		List of invoked method
+	 * @see InvokedMethod
+	 */
+	public List<InvokedMethod> getInvokedMethods(){
+		return this.mInvocatedMethods;
+	}
+	
 	public String getName(){
 		return this.mName;
 	}
@@ -105,6 +117,16 @@ public final class ReferMethod extends AbstractReferCode{
 		this.mInvocationCount++;
 	}
 	
+	/**
+	 * Invocation count describes how many times has this method
+	 * to be invoked from another fragment of source code. It's
+	 * usually when e.g. some another method invokes this method
+	 * in it's code block.
+	 * 
+	 * @return
+	 * 		Count, how many times is this method invoked from
+	 * 		from another place of source code.
+	 */
 	public int getInvocationCount(){
 		return this.mInvocationCount;
 	}
@@ -127,6 +149,8 @@ public final class ReferMethod extends AbstractReferCode{
 	}
 	
 	public boolean hasAuthor(){
+		if(this.mAuthor != null && this.mAuthor.length() > 0)
+			return true;
 		this.onAssignAuthor();
 		if(this.mAuthor != null && this.mAuthor.length() > 0)
 			return true;

@@ -13,10 +13,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
+import sk.stuba.fiit.perconik.eclipse.jgit.lib.GitRepositories;
 import sk.stuba.fiit.programmerproportion.data.DataProvider;
 import sk.stuba.fiit.programmerproportion.data.DataProvider.IterationListener;
-import sk.stuba.fiit.perconik.eclipse.jgit.lib.GitRepositories;
 import sk.stuba.fiit.programmerproportion.files.JavaUnitFinder;
+import sk.stuba.fiit.programmerproportion.models.InvokedMethod;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
 
 public class AuthorsHandler extends AbstractHandler{
@@ -30,6 +31,7 @@ public class AuthorsHandler extends AbstractHandler{
 	    StructuredSelection structuredSelection = (selection != null && selection instanceof StructuredSelection) ? (StructuredSelection) selection : null;
 	    
 	    if (structuredSelection != null && structuredSelection.getFirstElement() instanceof IJavaProject) {
+	    	DataProvider.getInstance().initialize();
 	    	IJavaProject javaProject = (IJavaProject) structuredSelection.getFirstElement();
 	    	IProject projectRes = javaProject.getProject();
 	    	Repository repo = setupRepository(projectRes);
@@ -41,13 +43,26 @@ public class AuthorsHandler extends AbstractHandler{
 	      MessageDialog.openInformation(shell, "Info",
 	          "Please select a Java source file");
 	    }
-	    System.out.println("Assign authors to methods");
+	    System.out.println("Assign authors to methods and invoked number");
+	    DataProvider.getInstance().iterate(new IterationListener() {
+			
+			@Override
+			public void onIterate(ReferMethod method) {
+				method.hasAuthor();
+				for(InvokedMethod im : method.getInvokedMethods()){
+					ReferMethod mapped = DataProvider.getInstance().getReferMethod(im.getPath(), im.getStringRepresentation());
+					if(mapped != null)
+						mapped.incrementInvocation();
+				}
+			}
+		});
+	    System.out.println("Invoked numbers to all methods assigned");
 	    DataProvider.getInstance().iterate(new IterationListener() {
 			
 			@Override
 			public void onIterate(ReferMethod method) {
 				if(method.hasAuthor())
-					System.out.println("method: " + method.getStringRepresentation() + "   author: " + method.getAuthor());
+					System.out.println("author: " + method.getAuthor() + "  invocation count: " + method.getInvocationCount() + "  desc: " + method.getStringRepresentation());
 			}
 		});
 	    //System.out.println(DataProvider.getInstance().toString());
