@@ -3,28 +3,57 @@ package sk.stuba.fiit.programmerproportion.models;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+
+import sk.stuba.fiit.perconik.core.java.dom.NodeCollectors;
+import sk.stuba.fiit.perconik.core.java.dom.TreeParsers;
 import sk.stuba.fiit.programmerproportion.utils.SourceCode;
+import sk.stuba.fiit.programmerproportion.utils.Strings;
 
 public final class ReferMethod extends AbstractReferCode{
 	
 	private static final double TRESHOLD_AUTHOR_PARTICIPATION = 0.5;
 
-	private final Set<String> mNames = new HashSet<String>();
+	private final String mName;
 	private final Map<String,ReferLine> mLines = new HashMap<String,ReferLine>();
-	private final String mPath;
+	private final Map<String,MethodInvocation> mInvocatedMethods = new HashMap<String,MethodInvocation>();
+	private final String mFilePath;
+	private final String mClass;
+	private final String mPackage;
 	private final double mComplexity;
 	private String mAuthor = null;
+	private int mInvocationCount = 0;
 	
-	public ReferMethod(final String name, final String codeBlock, final String path){
-		this.mNames.add(name);
-		this.mPath = path;
-		this.mComplexity = onCalculateComplexity(codeBlock);
+	public ReferMethod(final String name, final String codeBlock, final String path, final String mclass, final String mpackage, final List<MethodInvocation> iMethods){
+		this.mName = name;
+		this.mFilePath = path;
+		this.mClass = mclass;
+		this.mPackage = mpackage;
+		this.mComplexity = this.onCalculateComplexity(codeBlock);
+		for(MethodInvocation m : iMethods){
+			String key = Strings.representationOf(m.resolveMethodBinding());	
+			if(key != null)
+				mInvocatedMethods.put(key, m);
+		}			
+	}
+	
+	public static ReferMethod fromMethodDeclaration(final MethodDeclaration method, final String path, final List<MethodInvocation> iMethods){
+		String name = method.getName().toString();
+		String code = method.getBody().toString();
+		ITypeBinding mclass;
+		ReferMethod rm = null;
+		if(method.resolveBinding() != null){
+			mclass = method.resolveBinding().getDeclaringClass();//class name
+			rm = new ReferMethod(name, code, path, mclass.getName(), mclass.getPackage().getName(), iMethods);
+		}
+		return rm;
 	}
 
 	/**
@@ -59,12 +88,8 @@ public final class ReferMethod extends AbstractReferCode{
 		return this.mLines.values().iterator();
 	}
 	
-	public boolean hasName(String name){
-		return this.mNames.contains(name);
-	}
-	
-	public void addName(String name){
-		this.mNames.add(name);
+	public String getName(){
+		return this.mName;
 	}
 	
 	public double getComplexity(){
@@ -72,13 +97,12 @@ public final class ReferMethod extends AbstractReferCode{
 	}
 
 	public String getPath(){
-		return this.mPath;
+		return this.mFilePath;
 	}
 
 	@Override
 	public String getStringRepresentation() {
-		//TODO: mapping method representation to file path, class name and method name!!
-		return SourceCode.normalizeCode(this.mPath + "-" + this.mNames.iterator().next());
+		return SourceCode.normalizeCode(this.mPackage + "-" + this.mClass + "-" + this.mName);
 	}
 	
 	/**
@@ -127,7 +151,7 @@ public final class ReferMethod extends AbstractReferCode{
 	
 	@Override
 	public String toString() {
-		String o = new String("  Method: " + this.mNames.iterator().next() + "\n");
+		String o = new String("  Method: " + this.mName + "\n");
 		Iterator<ReferLine> lns = this.getLines();
 		final List<ReferLine> sortedLines = new ArrayList<ReferLine>();
 		while(lns.hasNext())

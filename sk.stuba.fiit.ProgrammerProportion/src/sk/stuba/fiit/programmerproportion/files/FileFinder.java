@@ -67,4 +67,10 @@ public final class FileFinder {
 			return true;
 		}
 	}
+	
+	public static void main(String... args){
+//    	FileFinder ff = new FileFinder(FileFinder.PATTERN_JAVA);
+//    	ff.setFileFinderListener(sourceFile);
+//    	ff.find(new File(projectRes.getLocationURI().getPath()));
+	}
 }
