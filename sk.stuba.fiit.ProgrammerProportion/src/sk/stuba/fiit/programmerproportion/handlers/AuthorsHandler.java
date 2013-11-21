@@ -1,17 +1,10 @@
 package sk.stuba.fiit.programmerproportion.handlers;
 
-import java.io.IOException;
-import java.util.List;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -20,12 +13,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-
-import sk.stuba.fiit.perconik.core.java.dom.NodeCollectors;
-import sk.stuba.fiit.perconik.core.java.dom.TreeParsers;
+import sk.stuba.fiit.programmerproportion.data.DataProvider;
+import sk.stuba.fiit.programmerproportion.data.DataProvider.IterationListener;
 import sk.stuba.fiit.perconik.eclipse.jgit.lib.GitRepositories;
 import sk.stuba.fiit.programmerproportion.files.JavaUnitFinder;
-import sk.stuba.fiit.programmerproportion.files.JavaUnitFinder.JavaUnitListener;
+import sk.stuba.fiit.programmerproportion.models.ReferMethod;
 
 public class AuthorsHandler extends AbstractHandler{
 
@@ -49,15 +41,15 @@ public class AuthorsHandler extends AbstractHandler{
 	      MessageDialog.openInformation(shell, "Info",
 	          "Please select a Java source file");
 	    }
-//	    System.out.println("Assign authors to methods");
-//	    DataProvider.getInstance().iterate(new IterationListener() {
-//			
-//			@Override
-//			public void onIterate(ReferMethod method) {
-//				if(method.hasAuthor())
-//					System.out.println("method: " + method.getStringRepresentation() + "   author: " + method.getAuthor());
-//			}
-//		});
+	    System.out.println("Assign authors to methods");
+	    DataProvider.getInstance().iterate(new IterationListener() {
+			
+			@Override
+			public void onIterate(ReferMethod method) {
+				if(method.hasAuthor())
+					System.out.println("method: " + method.getStringRepresentation() + "   author: " + method.getAuthor());
+			}
+		});
 	    //System.out.println(DataProvider.getInstance().toString());
 	    return null;
 	  }

@@ -6,15 +6,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-
-import sk.stuba.fiit.perconik.core.java.dom.NodeCollectors;
-import sk.stuba.fiit.perconik.core.java.dom.TreeParsers;
-import sk.stuba.fiit.programmerproportion.utils.SourceCode;
 import sk.stuba.fiit.programmerproportion.utils.Strings;
 
 public final class ReferMethod extends AbstractReferCode{
@@ -41,7 +35,7 @@ public final class ReferMethod extends AbstractReferCode{
 			String key = Strings.representationOf(m.resolveMethodBinding());	
 			if(key != null)
 				mInvocatedMethods.put(key, m);
-		}			
+		}
 	}
 	
 	public static ReferMethod fromMethodDeclaration(final MethodDeclaration method, final String path, final List<MethodInvocation> iMethods){
@@ -99,10 +93,18 @@ public final class ReferMethod extends AbstractReferCode{
 	public String getPath(){
 		return this.mFilePath;
 	}
+	
+	public void incrementInvocation(){
+		this.mInvocationCount++;
+	}
+	
+	public int getInvocationCount(){
+		return this.mInvocationCount;
+	}
 
 	@Override
 	public String getStringRepresentation() {
-		return SourceCode.normalizeCode(this.mPackage + "-" + this.mClass + "-" + this.mName);
+		return Strings.representationOf(mPackage, mClass, mName);
 	}
 	
 	/**

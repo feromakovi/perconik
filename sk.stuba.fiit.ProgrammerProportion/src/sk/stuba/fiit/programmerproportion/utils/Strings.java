@@ -17,9 +17,13 @@ public final class Strings {
 		String key = null;
 		if(methodBinding != null){
 			ITypeBinding c = methodBinding.getDeclaringClass();
-			key = new String(c.getPackage().getName() + "-" + c.getName() + "-" + methodBinding.getName());
+			key = representationOf(c.getPackage().getName(), c.getName(), methodBinding.getName());
 		}
 		return key;
+	}
+	
+	public static final String representationOf(final String packageName, final String className, final String methodName){
+		return new String(packageName + "-" + className + "-" + methodName);
 	}
 	
 //	public static final String removeLast(final String path, final String toRemove) {
