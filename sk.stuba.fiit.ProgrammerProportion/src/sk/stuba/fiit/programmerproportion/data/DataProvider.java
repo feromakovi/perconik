@@ -17,6 +17,11 @@ public final class DataProvider {
 		return INSTANCE;
 	}
 	
+	public void initialize(){
+		if(!this.mMethods.isEmpty())
+			this.mMethods.clear();
+	}
+	
 	public void update(final List<ReferMethod> methods){
 		for(ReferMethod m : methods){
 			final Map<String, ReferMethod> refs = getMethodsForFile(m.getPath());
@@ -37,13 +42,13 @@ public final class DataProvider {
 		}
 	}
 	
-	private Map<String,ReferMethod> getMethodsForFile(String filePath){
+	private Map<String,ReferMethod> getMethodsForFile(final String filePath){
 		if(!this.mMethods.containsKey(filePath))
 			this.mMethods.put(filePath, new HashMap<String,ReferMethod>());
 		return this.mMethods.get(filePath);
 	}
 	
-	public void iterate(IterationListener listener){
+	public void iterate(final IterationListener listener){
 		if(listener == null)
 			throw new NullPointerException("IterationListener isntance is null");
 		
@@ -53,6 +58,15 @@ public final class DataProvider {
 			while(methodIterator.hasNext())
 				listener.onIterate(methodIterator.next());
 		}
+	}
+	
+	public ReferMethod getReferMethod(final String referMethodPath, final String referMethodRepresentation){
+		if(this.mMethods.containsKey(referMethodPath)){
+			Map<String,ReferMethod> mapMethods = this.mMethods.get(referMethodPath);
+			if(mapMethods.containsKey(referMethodRepresentation))
+				return mapMethods.get(referMethodRepresentation);
+		}			
+		return null;
 	}
 	
 	public static interface IterationListener{
