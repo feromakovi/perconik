@@ -24,7 +24,7 @@ public final class DataProvider {
 	
 	public void update(final List<ReferMethod> methods){
 		for(ReferMethod m : methods){
-			final Map<String, ReferMethod> refs = getMethodsForFile(m.getPath());
+			final Map<String, ReferMethod> refs = getMethodsForPath(m.getPath());
 			if(refs != null){
 				if(refs.containsKey(m.getStringRepresentation())){
 					ReferMethod selected = refs.get(m.getStringRepresentation());
@@ -36,16 +36,16 @@ public final class DataProvider {
 	
 	public void insert(final List<ReferMethod> methods){
 		for(ReferMethod m : methods){
-			final Map<String, ReferMethod> refs = getMethodsForFile(m.getPath());
+			final Map<String, ReferMethod> refs = getMethodsForPath(m.getPath());
 			if(refs != null)
 				refs.put(m.getStringRepresentation(), m);
 		}
 	}
 	
-	private Map<String,ReferMethod> getMethodsForFile(final String filePath){
-		if(!this.mMethods.containsKey(filePath))
-			this.mMethods.put(filePath, new HashMap<String,ReferMethod>());
-		return this.mMethods.get(filePath);
+	private Map<String,ReferMethod> getMethodsForPath(final String path){
+		if(!this.mMethods.containsKey(path))
+			this.mMethods.put(path, new HashMap<String,ReferMethod>());
+		return this.mMethods.get(path);
 	}
 	
 	public void iterate(final IterationListener listener){
@@ -79,7 +79,7 @@ public final class DataProvider {
 		Iterator<String> files = this.mMethods.keySet().iterator();
 		while(files.hasNext()){
 			final String file = files.next();
-			final Map<String,ReferMethod> refs = getMethodsForFile(file);
+			final Map<String,ReferMethod> refs = getMethodsForPath(file);
 			if(refs != null){
 				value += "############################ File - " + file + "############################" + "\n";
 				Iterator<ReferMethod> methods = refs.values().iterator();
