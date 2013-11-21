@@ -26,6 +26,10 @@ public final class Strings {
 		return new String(packageName + "-" + className + "-" + methodName);
 	}
 	
+	public static final String representationOf(final String packageName, final String className){
+		return new String(packageName + "-" + className);
+	}
+	
 //	public static final String removeLast(final String path, final String toRemove) {
 //		return path.substring(0, path.length() - toRemove.length());
 //	}

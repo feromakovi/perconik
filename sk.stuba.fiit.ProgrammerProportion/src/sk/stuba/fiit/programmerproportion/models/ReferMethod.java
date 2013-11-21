@@ -18,16 +18,14 @@ public final class ReferMethod extends AbstractReferCode{
 	private final String mName;
 	private final Map<String,ReferLine> mLines = new HashMap<String,ReferLine>();
 	private final Map<String,MethodInvocation> mInvocatedMethods = new HashMap<String,MethodInvocation>();
-	private final String mFilePath;
 	private final String mClass;
 	private final String mPackage;
 	private final double mComplexity;
 	private String mAuthor = null;
 	private int mInvocationCount = 0;
 	
-	public ReferMethod(final String name, final String codeBlock, final String path, final String mclass, final String mpackage, final List<MethodInvocation> iMethods){
+	public ReferMethod(final String name, final String codeBlock, final String mclass, final String mpackage, final List<MethodInvocation> iMethods){
 		this.mName = name;
-		this.mFilePath = path;
 		this.mClass = mclass;
 		this.mPackage = mpackage;
 		this.mComplexity = this.onCalculateComplexity(codeBlock);
@@ -38,14 +36,14 @@ public final class ReferMethod extends AbstractReferCode{
 		}
 	}
 	
-	public static ReferMethod fromMethodDeclaration(final MethodDeclaration method, final String path, final List<MethodInvocation> iMethods){
+	public static ReferMethod fromMethodDeclaration(final MethodDeclaration method, final List<MethodInvocation> iMethods){
 		String name = method.getName().toString();
 		String code = method.getBody().toString();
 		ITypeBinding mclass;
 		ReferMethod rm = null;
 		if(method.resolveBinding() != null){
 			mclass = method.resolveBinding().getDeclaringClass();//class name
-			rm = new ReferMethod(name, code, path, mclass.getName(), mclass.getPackage().getName(), iMethods);
+			rm = new ReferMethod(name, code, mclass.getName(), mclass.getPackage().getName(), iMethods);
 		}
 		return rm;
 	}
@@ -90,8 +88,17 @@ public final class ReferMethod extends AbstractReferCode{
 		return this.mComplexity;
 	}
 
+	/**
+	 * Method returns representation of method's path in project.
+	 * Project path is composite from package name and from class
+	 * name, where is entire method declared.
+	 * 
+	 * @return Java project path to source file, where is the method declared
+	 * @see ITypeBinding
+	 * @see IPackageBinding
+	 */
 	public String getPath(){
-		return this.mFilePath;
+		return Strings.representationOf(mPackage, mClass);
 	}
 	
 	public void incrementInvocation(){
