@@ -8,7 +8,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.core;bundle-version="3.9.1",
  sk.stuba.fiit.perconik.eclipse;bundle-version="0.1.0",
  org.eclipse.core.resources;bundle-version="3.8.101",
- org.eclipse.core.expressions;bundle-version="3.4.500"
+ org.eclipse.core.expressions;bundle-version="3.4.500",
+ sk.stuba.fiit.perconik.libraries
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: com.google.common.io,
