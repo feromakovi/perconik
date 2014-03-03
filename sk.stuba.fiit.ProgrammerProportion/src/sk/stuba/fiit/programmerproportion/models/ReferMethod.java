@@ -6,9 +6,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.IPackageBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+
+import sk.stuba.fiit.programmerproportion.utils.SourceCode;
 import sk.stuba.fiit.programmerproportion.utils.Strings;
 
 public final class ReferMethod extends AbstractReferCode{
@@ -20,11 +25,11 @@ public final class ReferMethod extends AbstractReferCode{
 	private final List<InvokedMethod> mInvocatedMethods = new ArrayList<InvokedMethod>();
 	private final String mClass;
 	private final String mPackage;
-	private final double mComplexity;
+	private final CodeComplexity mComplexity;
 	private String mAuthor = null;
 	private int mInvocationCount = 0;
 	
-	public ReferMethod(final String name, final String codeBlock, final String mclass, final String mpackage, final List<MethodInvocation> iMethods){
+	public ReferMethod(final String name, final Block codeBlock, final String mclass, final String mpackage, final List<MethodInvocation> iMethods){
 		this.mName = name;
 		this.mClass = mclass;
 		this.mPackage = mpackage;
@@ -33,12 +38,12 @@ public final class ReferMethod extends AbstractReferCode{
 			InvokedMethod im = InvokedMethod.from(m);
 			if(im != null)
 				mInvocatedMethods.add(im);
-		}
+		}		
 	}
 	
 	public static ReferMethod from(final MethodDeclaration method, final List<MethodInvocation> iMethods){
 		String name = method.getName().toString();
-		String code = method.getBody().toString();
+		Block code = method.getBody();
 		ITypeBinding mclass;
 		ReferMethod rm = null;
 		if(method.resolveBinding() != null){
@@ -54,9 +59,9 @@ public final class ReferMethod extends AbstractReferCode{
 	 * @param codeBlock source code of entire method
 	 * @return calculated complexity of source code
 	 */
-	private double onCalculateComplexity(final String codeBlock) {
-		// TODO Implement calculating complexity
-		return 0;
+	private CodeComplexity onCalculateComplexity(final Block codeBlock) {
+		CodeComplexity cComplexity = new CodeComplexity(codeBlock);
+		return cComplexity;
 	}
 	
 	public void updateLineAuthors(final Iterator<ReferLine> lineIterator){
@@ -96,7 +101,7 @@ public final class ReferMethod extends AbstractReferCode{
 		return this.mName;
 	}
 	
-	public double getComplexity(){
+	public CodeComplexity getComplexity(){
 		return this.mComplexity;
 	}
 
