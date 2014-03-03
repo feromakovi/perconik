@@ -22,12 +22,14 @@ public final class Strings {
 		return key;
 	}
 	
-	public static final String representationOf(final String packageName, final String className, final String methodName){
-		return new String(packageName + "-" + className + "-" + methodName);
-	}
-	
-	public static final String representationOf(final String packageName, final String className){
-		return new String(packageName + "-" + className);
+	public static final String representationOf(final String... strings){
+		StringBuilder builder = new StringBuilder();
+		for(int i = 0; i < strings.length; i++){
+			builder.append(strings[i]);
+			if(i < (strings.length -1))
+				builder.append("-");
+		}
+		return builder.toString();
 	}
 	
 //	public static final String removeLast(final String path, final String toRemove) {
