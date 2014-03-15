@@ -10,6 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import jgibblda.Inferencer;
+import jgibblda.LDACmdOption;
+import jgibblda.Model;
 import uk.ac.open.crc.intt.IdentifierNameTokeniser;
 import uk.ac.open.crc.intt.IdentifierNameTokeniserFactory;
 
@@ -50,6 +53,18 @@ public final class SourceCode {
 		return tokens;
 	}
 	
+	public static final Model inference(final String[] words){
+		LDACmdOption ldaOption = new LDACmdOption(); 
+		ldaOption.inf = true; 
+		ldaOption.dir = "/Users/feromakovi/Games/JGibbLDA-v.1.0/train"; 
+		ldaOption.modelName = "model-final"; 
+		ldaOption.niters = 100;
+		Inferencer inferencer = new Inferencer(); 
+		inferencer.init(ldaOption);
+		Model newModel = inferencer.inference(words);
+		return newModel;
+	}
+	
 	public static final String[] tokenize(final String sourceCode){ //sourceCode.replaceAll("[(){}\n\",._':;?&!=@+/*<>]", " ").replaceAll("\\s+", " ").split("\\s");
 		IdentifierNameTokeniserFactory factory = new IdentifierNameTokeniserFactory();
 		factory.setSeparatorCharacters(SEPARATORS);
@@ -71,13 +86,14 @@ public final class SourceCode {
 	
 	public static void main(String... args) throws IOException{
 		String code = Files.toString(Paths.get("/Users/feromakovi/Desktop/token.java").toFile(), Charset.defaultCharset());
-		
+		String[] tokens = tokenize(code);
+		//Model newModel = inference(tokens);
 		for(String l : tokenize(code))
 			System.out.println(l);
 	}
 	
 	
-	private static final String SEPARATORS = "$_,-.:\"'(){}[]=<>;@+/*";
+private static final String SEPARATORS = "~^$&|?\\_,-.:\"'(){}[]=<>;%@+/*#!1234567890";
 	
 	private static final Set<String> WORDS = new HashSet<String>();
 	static{
@@ -140,5 +156,6 @@ public final class SourceCode {
 		WORDS.add("int");
 		WORDS.add("long");
 		WORDS.add("short");
+		WORDS.add("m");
 	}
 }
