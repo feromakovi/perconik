@@ -32,6 +32,16 @@ public final class Strings {
 		return builder.toString();
 	}
 	
+//	public static final String representationOf(final String delimiter, final String... strings){
+//		StringBuilder builder = new StringBuilder();
+//		for(int i = 0; i < strings.length; i++){
+//			builder.append(strings[i]);
+//			if(i < (strings.length -1))
+//				builder.append(delimiter);
+//		}
+//		return builder.toString();
+//	}
+	
 //	public static final String removeLast(final String path, final String toRemove) {
 //		return path.substring(0, path.length() - toRemove.length());
 //	}
