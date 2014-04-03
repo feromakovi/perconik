@@ -65,6 +65,8 @@ public class AuthorsHandler extends AbstractHandler{
 					System.out.println("author: " + method.getAuthor() + "  invocation count: " + method.getInvocationCount() + "  desc: " + method.getStringRepresentation());
 			}
 		});
+	    
+	    //tu si mozem prejst svojim zoznamom triedy ktore maju topics a refer methody
 	    //System.out.println(DataProvider.getInstance().toString());
 	    return null;
 	  }

@@ -29,6 +29,9 @@ public final class ReferMethod extends AbstractReferCode{
 	private String mAuthor = null;
 	private int mInvocationCount = 0;
 	
+	// Mapping all authors from the method to count of lines of code they've written 
+	private Map<String,Integer> authorsParticipation = new HashMap<String,Integer>();
+	
 	public ReferMethod(final String name, final Block codeBlock, final String mclass, final String mpackage, final List<MethodInvocation> iMethods){
 		this.mName = name;
 		this.mClass = mclass;
@@ -166,8 +169,11 @@ public final class ReferMethod extends AbstractReferCode{
 		return this.mAuthor;
 	}
 	
+	public Map<String, Integer> getContributors(){
+		return this.authorsParticipation;
+	}
+	
 	private void onAssignAuthor(){
-		Map<String,Integer> authorsParticipation = new HashMap<String,Integer>();
 		Iterator<ReferLine> lineIterator = this.mLines.values().iterator();
 		while(lineIterator.hasNext()){
 			ReferLine line = lineIterator.next();
