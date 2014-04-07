@@ -1,18 +1,22 @@
 package sk.stuba.fiit.programmerproportion.handlers;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+
 import sk.stuba.fiit.perconik.core.java.dom.TreeParsers;
 import sk.stuba.fiit.perconik.eclipse.jgit.lib.GitRepositories;
 import sk.stuba.fiit.programmerproportion.data.DataProvider;
 import sk.stuba.fiit.programmerproportion.files.JavaUnitFinder.JavaUnitListener;
 import sk.stuba.fiit.programmerproportion.models.MethodDataHolder;
+import sk.stuba.fiit.programmerproportion.models.ReferClass;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
 import sk.stuba.fiit.programmerproportion.utils.SourceCode;
 
@@ -27,6 +31,8 @@ public final class SourceFileHandler implements JavaUnitListener{
 	@Override
 	public void onCompilationUnit(final ICompilationUnit iCompilationUnit) {
 		final String relativePath = iCompilationUnit.getPath().makeAbsolute().removeFirstSegments(1).toString();
+		final String javaClassLocation = mRepository.getWorkTree() + File.separator + relativePath;
+		final ReferClass mClass = new ReferClass(javaClassLocation);
 		Iterator<RevCommit> revisions = GitRepositories.getFileLog(mRepository, relativePath).iterator();
 		if(revisions.hasNext()){
 			//snapshot of current project
@@ -34,12 +40,14 @@ public final class SourceFileHandler implements JavaUnitListener{
 			GitRepositories.checkoutFile(mRepository, relativePath, commit);
 			List<ReferMethod> referMethods = getReferMethods(iCompilationUnit, -1, commit.getCommitterIdent().getEmailAddress());
 			DataProvider.getInstance().insert(referMethods);
+			mClass.addMethod(referMethods);
 		}
 		while(revisions.hasNext()){
 			RevCommit commit = revisions.next();
 			GitRepositories.checkoutFile(mRepository, relativePath, commit);
 			List<ReferMethod> referMethods = getReferMethods(iCompilationUnit, commit.getCommitTime(), commit.getCommitterIdent().getEmailAddress());
 			DataProvider.getInstance().update(referMethods);
+			mClass.setAuthor(commit.getCommitterIdent().getEmailAddress());
 		}	
 		GitRepositories.checkoutFileToHead(mRepository, relativePath);
 	}

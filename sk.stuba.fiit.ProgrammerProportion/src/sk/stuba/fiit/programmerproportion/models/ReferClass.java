@@ -39,7 +39,7 @@ public final class ReferClass extends AbstractReferCode{
 	
 	private void onInferTopics() throws Exception{
 		String source = Files.toString(Paths.get(this.mFilePath).toFile(), Charset.defaultCharset());
-		
+		//TODO: inference topics from code
 	}
 	
 	public void addMethod(ReferMethod method){
