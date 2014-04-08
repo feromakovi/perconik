@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.CompilationUnit;
+
+import sk.stuba.fiit.perconik.core.java.dom.TreeParsers;
+import sk.stuba.fiit.programmerproportion.handlers.ClassVisitor;
+
 import com.google.common.io.Files;
 
 public final class ReferClass extends AbstractReferCode{
@@ -38,8 +43,13 @@ public final class ReferClass extends AbstractReferCode{
 	}
 	
 	private void onInferTopics() throws Exception{
-		String source = Files.toString(Paths.get(this.mFilePath).toFile(), Charset.defaultCharset());
+		ClassVisitor classVisitor = new ClassVisitor();
+		CompilationUnit compilationUnit = (CompilationUnit) TreeParsers.parse(Paths.get(this.mFilePath));
+		compilationUnit.accept(classVisitor);
+		classVisitor.inference();
+		
 		//TODO: inference topics from code
+		
 	}
 	
 	public void addMethod(ReferMethod method){
