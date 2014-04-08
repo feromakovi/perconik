@@ -1,6 +1,5 @@
 package sk.stuba.fiit.programmerproportion.models;
 
-import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,8 +9,6 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import sk.stuba.fiit.perconik.core.java.dom.TreeParsers;
 import sk.stuba.fiit.programmerproportion.handlers.ClassVisitor;
-
-import com.google.common.io.Files;
 
 public final class ReferClass extends AbstractReferCode{
 	
@@ -47,9 +44,7 @@ public final class ReferClass extends AbstractReferCode{
 		CompilationUnit compilationUnit = (CompilationUnit) TreeParsers.parse(Paths.get(this.mFilePath));
 		compilationUnit.accept(classVisitor);
 		classVisitor.inference();
-		
 		//TODO: inference topics from code
-		
 	}
 	
 	public void addMethod(ReferMethod method){
