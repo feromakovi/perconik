@@ -2,6 +2,7 @@ package sk.stuba.fiit.programmerproportion.utils;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 
 import jgibblda.Inferencer;
 import jgibblda.LDACmdOption;
@@ -13,7 +14,9 @@ import org.osgi.framework.Bundle;
 
 public class LDAHelper {
 	
-	public static final Model inference(final String[] words){
+	private static final int MAX_TOPIC_TERMS = 8;
+	
+	public static final Collection<String> inference(final String[] words){
 		String modelPath = null;
 		try{
 			Bundle bundle = Platform.getBundle("sk.stuba.fiit.ProgrammerProportion");
@@ -27,7 +30,7 @@ public class LDAHelper {
 		ldaOption.niters = 100;
 		Inferencer inferencer = new Inferencer(); 
 		inferencer.init(ldaOption);
-		Model newModel = inferencer.inference(words);
-		return newModel;
+		Model m = inferencer.inference(words);
+		return m.getTopicTerms(MAX_TOPIC_TERMS);
 	}
 }

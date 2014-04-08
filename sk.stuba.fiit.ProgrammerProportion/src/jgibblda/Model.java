@@ -37,10 +37,15 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 import java.util.Vector;
 
 public class Model {	
@@ -713,4 +718,70 @@ public class Model {
 		return true;
 	}
 	
+	public Collection<String> getTopicTerms(final int count){
+		Set<String> topics = new HashSet<String>();
+		try{
+			SortedSet<Term> terms = Collections.synchronizedSortedSet(new TreeSet<Term>());
+			if (twords > V){
+				twords = V;
+			}
+			
+			for (int k = 0; k < K; k++){
+				List<Pair> wordsProbsList = new ArrayList<Pair>(); 
+				for (int w = 0; w < V; w++){
+					Pair p = new Pair(w, phi[k][w], true);
+					
+					wordsProbsList.add(p);
+				}//end foreach word
+				
+				//print topic
+				//System.out.println("Topic " + k + "th:\n");
+				Collections.sort(wordsProbsList);
+				
+				for (int i = 0; i < twords; i++){
+					if (data.localDict.contains((Integer)wordsProbsList.get(i).first)){
+						String word = data.localDict.getWord((Integer)wordsProbsList.get(i).first);
+						terms.add(new Term(word, (Double) wordsProbsList.get(i).second));
+						//System.out.println("\t" + word + " " + wordsProbsList.get(i).second + "\n");
+					}
+				}
+			} //end foreach topic
+			Iterator<Term> i = terms.iterator();
+			while(i.hasNext() && topics.size() < count){
+				Term t = i.next();
+				topics.add(t.getWord());
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return topics;
+	}	
+	
+	public static class Term implements Comparable<Term>{
+		
+		private String mWord;
+		
+		private double value;
+		
+		public Term(String word, double value){
+			this.mWord = word;
+			this.value = value;
+		}
+		
+		public String getWord(){return this.mWord;}
+		public double getValue(){return this.value;}
+
+		@Override
+		public String toString() {
+			return this.mWord;
+		}
+		
+		@Override
+		public int compareTo(Term o) {
+			if(o.getValue() < this.value) return -1;
+			else if(o.getValue() > this.value) return 1;
+			else return 0;
+		}
+	}	
 }

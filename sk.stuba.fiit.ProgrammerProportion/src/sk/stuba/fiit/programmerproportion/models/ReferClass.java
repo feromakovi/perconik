@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import sk.stuba.fiit.perconik.core.java.dom.TreeParsers;
 import sk.stuba.fiit.programmerproportion.handlers.ClassVisitor;
+import sk.stuba.fiit.programmerproportion.utils.SourceCode;
 
 public final class ReferClass extends AbstractReferCode{
 	
@@ -43,8 +44,11 @@ public final class ReferClass extends AbstractReferCode{
 		ClassVisitor classVisitor = new ClassVisitor();
 		CompilationUnit compilationUnit = (CompilationUnit) TreeParsers.parse(Paths.get(this.mFilePath));
 		compilationUnit.accept(classVisitor);
-		classVisitor.inference();
-		//TODO: inference topics from code
+		this.mTopics.addAll(classVisitor.inference());	
+		
+		System.out.println("path: " + this.mFilePath);
+		System.out.println(SourceCode.representationOf(" ", mTopics.toArray(new String[mTopics.size()])));
+		System.out.println("");
 	}
 	
 	public void addMethod(ReferMethod method){

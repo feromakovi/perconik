@@ -1,6 +1,7 @@
 package sk.stuba.fiit.programmerproportion.handlers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -29,7 +30,7 @@ public class ClassVisitor extends ASTVisitor{
 		return super.visit(node);
 	}
 	
-	public void inference(){
-		LDAHelper.inference(mTokens.toArray(new String[mTokens.size()]));
+	public Collection<String> inference(){
+		return LDAHelper.inference(mTokens.toArray(new String[mTokens.size()]));
 	}
 }
