@@ -1241,6 +1241,7 @@ public final class StopWords {
 		ENGLISH.add("two");
 		ENGLISH.add("u");
 		ENGLISH.add("un");
+		ENGLISH.add("unchecked");
 		ENGLISH.add("under");
 		ENGLISH.add("unfortunately");
 		ENGLISH.add("unless");

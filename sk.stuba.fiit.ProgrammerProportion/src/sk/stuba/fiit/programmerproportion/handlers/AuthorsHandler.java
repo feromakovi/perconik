@@ -56,15 +56,15 @@ public class AuthorsHandler extends AbstractHandler{
 				}
 			}
 		});
-	    System.out.println("Invoked numbers to all methods assigned");
-	    DataProvider.getInstance().iterate(new IterationListener() {
-			
-			@Override
-			public void onIterate(ReferMethod method) {
-				if(method.hasAuthor())
-					System.out.println("author: " + method.getAuthor() + "  invocation count: " + method.getInvocationCount() + "  desc: " + method.getStringRepresentation());
-			}
-		});
+//	    System.out.println("Invoked numbers to all methods assigned");
+//	    DataProvider.getInstance().iterate(new IterationListener() {
+//			
+//			@Override
+//			public void onIterate(ReferMethod method) {
+//				if(method.hasAuthor())
+//					System.out.println("author: " + method.getAuthor() + "  invocation count: " + method.getInvocationCount() + "  desc: " + method.getStringRepresentation());
+//			}
+//		});
 	    
 	    //tu si mozem prejst svojim zoznamom triedy ktore maju topics a refer methody
 	    //System.out.println(DataProvider.getInstance().toString());
