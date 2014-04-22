@@ -50,6 +50,8 @@ public final class SourceFileHandler implements JavaUnitListener{
 			mClass.setAuthor(commit.getCommitterIdent().getEmailAddress());
 		}	
 		GitRepositories.checkoutFileToHead(mRepository, relativePath);
+		DataProvider.getInstance().addClass(mClass);
+		DataProvider.getInstance().updateAuthorsContribution(mClass);
 	}
 	
 	private List<ReferMethod> getReferMethods(final ICompilationUnit iCompilationUnit, final long time, final String author){

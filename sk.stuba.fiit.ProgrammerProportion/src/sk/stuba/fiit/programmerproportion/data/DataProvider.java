@@ -1,15 +1,20 @@
 package sk.stuba.fiit.programmerproportion.data;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import sk.stuba.fiit.programmerproportion.models.ReferAuthor;
+import sk.stuba.fiit.programmerproportion.models.ReferClass;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
 
 public final class DataProvider {
 	
 	private final Map<String, HashMap<String, ReferMethod>> mMethods = new HashMap<String,HashMap<String,ReferMethod>>();//mapping path to hashmap of method representation and method
+	private final Map<String, ReferClass> mClasses = new HashMap<String, ReferClass>();
+	private final Map<String, ReferAuthor> mAuthors = new HashMap<String, ReferAuthor>();
 
 	private static final DataProvider INSTANCE = new DataProvider();
 	
@@ -22,6 +27,7 @@ public final class DataProvider {
 			this.mMethods.clear();
 	}
 	
+	// Handling methods	
 	public void update(final List<ReferMethod> methods){
 		for(ReferMethod m : methods){
 			final Map<String, ReferMethod> refs = getMethodsForPath(m.getPath());
@@ -90,5 +96,50 @@ public final class DataProvider {
 			value += "\n";
 		}
 		return value;
+	}
+	
+	// Handling classes
+	public void addClass(ReferClass clas){
+		this.mClasses.put(clas.getStringRepresentation(), clas);
+	}
+	
+	public ReferClass getClass(String filePath){
+		if(this.mClasses.containsKey(filePath))
+			return this.mClasses.get(filePath);
+		return null;
+	}
+	
+	public Collection<ReferClass> getClasses(){
+		return this.mClasses.values();
+	}
+	
+	// Handling authors
+	public ReferAuthor addAuthor(ReferAuthor author){
+		this.mAuthors.put(author.getStringRepresentation(), author);
+		return this.getAuthor(author.getStringRepresentation());
+	}
+	
+	public void updateAuthorsContribution(ReferClass clas){
+		Map<String, Integer> aToL = clas.getContribution();
+		Iterator<String> aIterator = aToL.keySet().iterator();
+		while(aIterator.hasNext()){
+			String authRep = aIterator.next();
+			Integer lCount = aToL.get(authRep);
+			ReferAuthor refAuth = getAuthor(authRep);
+			if(refAuth == null)
+				refAuth = addAuthor(new ReferAuthor(authRep));
+			for(String t : clas.getTopics())
+				refAuth.updateTopics(t, lCount);
+		}
+	}
+	
+	public ReferAuthor getAuthor(String authorRepresentation){
+		if(this.mAuthors.containsKey(authorRepresentation))
+			return this.mAuthors.get(authorRepresentation);
+		return null;
+	}
+	
+	public Collection<ReferAuthor> getAuthors(){
+		return this.mAuthors.values();
 	}
 }

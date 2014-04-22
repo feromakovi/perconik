@@ -3,7 +3,10 @@ package sk.stuba.fiit.programmerproportion.models;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
@@ -74,4 +77,26 @@ public final class ReferClass extends AbstractReferCode{
 	
 	public List<ReferMethod> getMethods(){return this.mMethods;}
 	public List<String> getTopics(){return this.mTopics;}
+	
+	@Override
+	public String toString() {
+		return this.mFilePath;
+	}
+	// Method returns map of authors referenced how many lines of code they've written 
+	public Map<String, Integer> getContribution(){
+		final Map<String, Integer> authorsToLines = new HashMap<String, Integer>();
+		for(ReferMethod m : this.mMethods){
+			Map<String, Integer> methodAuthors = m.getContributors();
+			Iterator<String> authors = methodAuthors.keySet().iterator();
+			while(authors.hasNext()){
+				String author = authors.next();
+				int linesCount = methodAuthors.get(author);
+				if(authorsToLines.containsKey(author))
+					authorsToLines.put(author, (authorsToLines.get(author) + linesCount));
+				else
+					authorsToLines.put(author, linesCount);
+			}
+		}
+		return authorsToLines;
+	}
 }
