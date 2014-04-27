@@ -1,7 +1,11 @@
 package sk.stuba.fiit.programmerproportion.models;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import jgibblda.Model.Term;
 
 public class ReferAuthor extends AbstractReferCode {
 	
@@ -28,5 +32,16 @@ public class ReferAuthor extends AbstractReferCode {
 	@Override
 	public int hashCode() {
 		return this.mID.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b = b.append("======== ").append(this.mID).append(" ========").append("\n");
+		List<Term> terms = Term.fromHashMap(mTopicsToContribution);
+		Collections.sort(terms);
+		for(Term t : terms)
+			b = b.append("	").append(t.getWord()).append(":").append(t.getValue()).append("\n");
+		return b.toString();
 	}
 }

@@ -58,7 +58,7 @@ public final class ReferClass extends AbstractReferCode{
 		this.mMethods.add(method);
 	}
 	
-	public void addMethod(Collection<ReferMethod> methods){
+	public void addMethods(Collection<ReferMethod> methods){
 		this.mMethods.addAll(methods);
 	}
 

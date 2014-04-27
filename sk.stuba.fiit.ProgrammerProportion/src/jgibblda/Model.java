@@ -42,6 +42,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
@@ -782,6 +783,16 @@ public class Model {
 			if(o.getValue() < this.value) return -1;
 			else if(o.getValue() > this.value) return 1;
 			else return 0;
+		}
+		
+		public static List<Term> fromHashMap(Map<String, Integer> map){
+			List<Term> terms = new ArrayList<Term>();
+			Iterator<String> wordIterator = map.keySet().iterator();
+			while(wordIterator.hasNext()){
+				String word = wordIterator.next();
+				terms.add(new Term(word, map.get(word)));
+			}				
+			return terms;
 		}
 	}	
 }

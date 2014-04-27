@@ -170,6 +170,8 @@ public final class ReferMethod extends AbstractReferCode{
 	}
 	
 	public Map<String, Integer> getContributors(){
+		authorsParticipation.clear();
+		onAssignAuthor();
 		return this.authorsParticipation;
 	}
 	

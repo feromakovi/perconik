@@ -48,7 +48,7 @@ public final class DataProvider {
 		}
 	}
 	
-	private Map<String,ReferMethod> getMethodsForPath(final String path){
+	public Map<String,ReferMethod> getMethodsForPath(final String path){
 		if(!this.mMethods.containsKey(path))
 			this.mMethods.put(path, new HashMap<String,ReferMethod>());
 		return this.mMethods.get(path);

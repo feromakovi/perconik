@@ -13,11 +13,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
+
 import sk.stuba.fiit.perconik.eclipse.jgit.lib.GitRepositories;
 import sk.stuba.fiit.programmerproportion.data.DataProvider;
 import sk.stuba.fiit.programmerproportion.data.DataProvider.IterationListener;
 import sk.stuba.fiit.programmerproportion.files.JavaUnitFinder;
 import sk.stuba.fiit.programmerproportion.models.InvokedMethod;
+import sk.stuba.fiit.programmerproportion.models.ReferAuthor;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
 
 public class AuthorsHandler extends AbstractHandler{
@@ -56,6 +58,11 @@ public class AuthorsHandler extends AbstractHandler{
 				}
 			}
 		});
+	    System.out.println("Write programmers knowledges, authors count: " + DataProvider.getInstance().getAuthors().size());
+	    for(ReferAuthor a : DataProvider.getInstance().getAuthors())
+	    	System.out.println(a.toString());
+	    
+	    System.out.println("Finito");
 //	    System.out.println("Invoked numbers to all methods assigned");
 //	    DataProvider.getInstance().iterate(new IterationListener() {
 //			

@@ -2,8 +2,11 @@ package sk.stuba.fiit.programmerproportion.handlers;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -30,6 +33,7 @@ public final class SourceFileHandler implements JavaUnitListener{
 	
 	@Override
 	public void onCompilationUnit(final ICompilationUnit iCompilationUnit) {
+		final Set<String> paths = new HashSet<String>();
 		final String relativePath = iCompilationUnit.getPath().makeAbsolute().removeFirstSegments(1).toString();
 		final String javaClassLocation = mRepository.getWorkTree() + File.separator + relativePath;
 		final ReferClass mClass = new ReferClass(javaClassLocation);
@@ -40,15 +44,19 @@ public final class SourceFileHandler implements JavaUnitListener{
 			GitRepositories.checkoutFile(mRepository, relativePath, commit);
 			List<ReferMethod> referMethods = getReferMethods(iCompilationUnit, -1, commit.getCommitterIdent().getEmailAddress());
 			DataProvider.getInstance().insert(referMethods);
-			mClass.addMethod(referMethods);
+			addPaths(paths, referMethods);
 		}
 		while(revisions.hasNext()){
 			RevCommit commit = revisions.next();
 			GitRepositories.checkoutFile(mRepository, relativePath, commit);
 			List<ReferMethod> referMethods = getReferMethods(iCompilationUnit, commit.getCommitTime(), commit.getCommitterIdent().getEmailAddress());
 			DataProvider.getInstance().update(referMethods);
+			addPaths(paths, referMethods);
 			mClass.setAuthor(commit.getCommitterIdent().getEmailAddress());
-		}	
+		}
+		Iterator<String> pathIterator = paths.iterator();
+		while(pathIterator.hasNext())
+			mClass.addMethods(DataProvider.getInstance().getMethodsForPath(pathIterator.next()).values());
 		GitRepositories.checkoutFileToHead(mRepository, relativePath);
 		DataProvider.getInstance().addClass(mClass);
 		DataProvider.getInstance().updateAuthorsContribution(mClass);
@@ -69,6 +77,12 @@ public final class SourceFileHandler implements JavaUnitListener{
 			}				
 		}
 		return referMethods;
+	}
+	
+	private static void addPaths(Set<String> paths, Collection<ReferMethod> methods){
+		for(ReferMethod m : methods)
+			if(!paths.contains(m.getPath()))
+				paths.add(m.getPath());
 	}
 	
 	private List<MethodDataHolder> getMethodDeclarations(final ICompilationUnit iCompilationUnit){
