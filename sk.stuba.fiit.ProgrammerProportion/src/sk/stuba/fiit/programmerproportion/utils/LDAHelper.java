@@ -34,6 +34,10 @@ public class LDAHelper {
 	private static final int MAX_TOPIC_TERMS = 8;
 	
 	public static final Collection<String> inference(final String[] words, final LDAModel modelName){
+		return inference(words, modelName, MAX_TOPIC_TERMS);
+	}
+	
+	public static final Collection<String> inference(final String[] words, final LDAModel modelName, int maxTopicsCount){
 		String modelPath = null;
 		try{
 			Bundle bundle = Platform.getBundle("sk.stuba.fiit.ProgrammerProportion");
@@ -48,6 +52,6 @@ public class LDAHelper {
 		Inferencer inferencer = new Inferencer(); 
 		inferencer.init(ldaOption);
 		Model m = inferencer.inference(words);
-		return m.getTopicTerms(MAX_TOPIC_TERMS);
+		return m.getTopicTerms(maxTopicsCount);
 	}
 }
