@@ -1,5 +1,8 @@
 package sk.stuba.fiit.programmerproportion.handlers;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -20,7 +23,9 @@ import sk.stuba.fiit.programmerproportion.data.DataProvider.IterationListener;
 import sk.stuba.fiit.programmerproportion.files.JavaUnitFinder;
 import sk.stuba.fiit.programmerproportion.models.InvokedMethod;
 import sk.stuba.fiit.programmerproportion.models.ReferAuthor;
+import sk.stuba.fiit.programmerproportion.models.ReferClass;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
+import sk.stuba.fiit.programmerproportion.models.TfIdf;
 
 public class AuthorsHandler extends AbstractHandler{
 
@@ -58,6 +63,24 @@ public class AuthorsHandler extends AbstractHandler{
 				}
 			}
 		});
+	    System.out.println("Calculating IDF");
+	    final Collection<ReferClass> classes = DataProvider.getInstance().getClasses();
+	    final int documentsCount = classes.size();
+	    for(ReferClass c : classes){
+	    	Iterator<String> classTerms = c.getTfIdfMap().keySet().iterator();
+	    	while(classTerms.hasNext()){
+	    		String word = classTerms.next();
+	    		int count = 0;
+	    		for(ReferClass n : classes)
+	    			if(n.containsWord(word))
+	    				count++;
+	    		c.getTfIdfMap().get(word).setIDF(count, documentsCount);
+	    	}
+	    	System.out.println("Class " + c.toString());
+	    	for(TfIdf i : c.getTfIdfs())
+	    		System.out.println(i.toString());
+	    }
+	    
 	    System.out.println("Write programmers knowledges, authors count: " + DataProvider.getInstance().getAuthors().size());
 	    for(ReferAuthor a : DataProvider.getInstance().getAuthors())
 	    	System.out.println(a.toString());

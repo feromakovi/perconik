@@ -1,13 +1,17 @@
 package sk.stuba.fiit.programmerproportion.handlers;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+import sk.stuba.fiit.programmerproportion.models.TfIdf;
 import sk.stuba.fiit.programmerproportion.utils.LDAHelper;
+import sk.stuba.fiit.programmerproportion.utils.LDAHelper.LDAModel;
 import sk.stuba.fiit.programmerproportion.utils.SourceCode;
 import sk.stuba.fiit.programmerproportion.utils.StopWords;
 
@@ -21,16 +25,53 @@ public class ClassVisitor extends ASTVisitor{
 			final String originalCode = node.toString();
 			final String noJavaCode = SourceCode.removeSet(SourceCode.removeSeparators(originalCode), StopWords.JAVA, false); //Not ignore case because of INTT - it won't separate words 
 			String[] tokens = SourceCode.tokenize(noJavaCode);
-			if(tokens != null){
-				tokens = SourceCode.removeSet(SourceCode.representationOf(" ", tokens), StopWords.OFTEN, true).split(" ");
-				for(String token : tokens)
-					mTokens.add(token);
+			if(tokens != null && tokens.length > 0){
+				this.mTokens = arrayToCollection(mTokens, tokens);
 			}
 		}catch(Exception e){}
 		return super.visit(node);
 	}
 	
-	public Collection<String> inference(){
-		return LDAHelper.inference(mTokens.toArray(new String[mTokens.size()]));
+	public void inferTopics(final List<String> mLDATopics, final LDAModel ldaModel) {
+		String[] wordsToInfer = null;
+		switch (ldaModel) {
+		case ALL:
+			wordsToInfer = mTokens.toArray(new String[mTokens.size()]);
+			break;
+		case OFTEN_REMOVED:
+			wordsToInfer = getTokensWithoutOften();
+			break;
+		}
+		mLDATopics.addAll(LDAHelper.inference(wordsToInfer, ldaModel));
+	}
+	
+	public void calculateTermFrequency(final Map<String, TfIdf> mTfIdf) {
+		Map<String, Integer> wToC = new HashMap<String, Integer>(); //mapping every word from document to count of appearance
+		for(String w : mTokens){
+			if(wToC.containsKey(w))
+				wToC.put(w, (wToC.get(w) + 1));
+			else
+				wToC.put(w, 1);
+		}
+		Iterator<String> wIterator = wToC.keySet().iterator();
+		while(wIterator.hasNext()){
+			String word = wIterator.next();
+			double tf = (double) ((double) wToC.get(word) / (double) mTokens.size());
+			mTfIdf.put(word, new TfIdf(word, tf));
+		}
+	}
+	
+	public List<String> getTokens(){
+		return this.mTokens;
+	}
+	
+	private String[] getTokensWithoutOften(){
+		return SourceCode.removeSet(SourceCode.representationOf(" ", mTokens.toArray(new String[mTokens.size()])), StopWords.OFTEN, true).split(" ");
+	}
+	
+	private static List<String> arrayToCollection(List<String> collection, String[] array){
+		for(String s : array)
+			collection.add(s);
+		return collection;
 	}
 }

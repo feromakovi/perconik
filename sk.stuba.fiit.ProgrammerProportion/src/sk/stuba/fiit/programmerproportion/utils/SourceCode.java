@@ -113,23 +113,23 @@ public final class SourceCode {
 		return builder.toString();
 	}
 	
-	public static final Model inference(final String[] words){
-		LDACmdOption ldaOption = new LDACmdOption(); 
-		ldaOption.inf = true; 
-		ldaOption.dir = "/Users/feromakovi/Games/JGibbLDA-v.1.0/train"; 
-		ldaOption.modelName = "model-final"; 
-		ldaOption.niters = 100;
-		Inferencer inferencer = new Inferencer(); 
-		inferencer.init(ldaOption);
-		Model newModel = inferencer.inference(words);
-		return newModel;
-	}
+//	public static final Model inference(final String[] words){
+//		LDACmdOption ldaOption = new LDACmdOption(); 
+//		ldaOption.inf = true; 
+//		ldaOption.dir = "/Users/feromakovi/Games/JGibbLDA-v.1.0/train"; 
+//		ldaOption.modelName = "model-final"; 
+//		ldaOption.niters = 100;
+//		Inferencer inferencer = new Inferencer(); 
+//		inferencer.init(ldaOption);
+//		Model newModel = inferencer.inference(words);
+//		return newModel;
+//	}
 	
 	
 	public static void main(String... args) throws IOException{
 		String code = Files.toString(Paths.get("/Users/feromakovi/Desktop/token.j").toFile(), Charset.defaultCharset());
 		String[] tokens = tokenize(code);
-		Model newModel = inference(tokens);
+		//Model newModel = inference(tokens);
 //		for(String l : tokenize(code))
 //			System.out.println(l);
 	}
