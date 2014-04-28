@@ -11,9 +11,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jgibblda.Inferencer;
-import jgibblda.LDACmdOption;
-import jgibblda.Model;
 import uk.ac.open.crc.intt.IdentifierNameTokeniser;
 import uk.ac.open.crc.intt.IdentifierNameTokeniserFactory;
 
