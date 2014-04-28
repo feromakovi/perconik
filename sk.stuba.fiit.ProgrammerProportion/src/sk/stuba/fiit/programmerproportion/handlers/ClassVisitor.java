@@ -10,8 +10,8 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import sk.stuba.fiit.programmerproportion.models.TfIdf;
-import sk.stuba.fiit.programmerproportion.utils.LDAHelper;
-import sk.stuba.fiit.programmerproportion.utils.LDAHelper.LDAModel;
+import sk.stuba.fiit.programmerproportion.utils.ModelHelper;
+import sk.stuba.fiit.programmerproportion.utils.ModelHelper.LDAModel;
 import sk.stuba.fiit.programmerproportion.utils.SourceCode;
 import sk.stuba.fiit.programmerproportion.utils.StopWords;
 
@@ -42,10 +42,10 @@ public class ClassVisitor extends ASTVisitor{
 			wordsToInfer = getTokensWithoutOften();
 			break;
 		}
-		mLDATopics.addAll(LDAHelper.inference(wordsToInfer, ldaModel));
+		mLDATopics.addAll(ModelHelper.inference(wordsToInfer, ldaModel));
 	}
 	
-	public void calculateTermFrequency(final Map<String, TfIdf> mTfIdf) {
+	public void calculateTfIdf(final Map<String, TfIdf> mTfIdf) {
 		Map<String, Integer> wToC = new HashMap<String, Integer>(); //mapping every word from document to count of appearance
 		for(String w : mTokens){
 			if(wToC.containsKey(w))
@@ -57,7 +57,9 @@ public class ClassVisitor extends ASTVisitor{
 		while(wIterator.hasNext()){
 			String word = wIterator.next();
 			double tf = (double) ((double) wToC.get(word) / (double) mTokens.size());
-			mTfIdf.put(word, new TfIdf(word, tf));
+			TfIdf h = new TfIdf(word, tf);
+			h.setIDF(ModelHelper.getPassesDocs(word), ModelHelper.IDF_DOCUMENTS_COUNT);
+			mTfIdf.put(word, h);
 		}
 	}
 	

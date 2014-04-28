@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import sk.stuba.fiit.perconik.core.java.dom.TreeParsers;
 import sk.stuba.fiit.programmerproportion.handlers.ClassVisitor;
-import sk.stuba.fiit.programmerproportion.utils.LDAHelper;
+import sk.stuba.fiit.programmerproportion.utils.ModelHelper;
 import sk.stuba.fiit.programmerproportion.utils.SourceCode;
 
 public final class ReferClass extends AbstractReferCode{
@@ -49,11 +49,12 @@ public final class ReferClass extends AbstractReferCode{
 	private final ClassVisitor mClassVisitor = new ClassVisitor();	
 	
 	public ReferClass(final String filePath) {
+		System.out.println("loaded " + filePath);
 		this.mFilePath = filePath;
 		try{
 			CompilationUnit compilationUnit = onCreateCompilationUnit();
 			compilationUnit.accept(mClassVisitor);
-			onCalculateTF();
+			onCalculateTFIDF();
 			onInferTopics();			
 		}catch(Exception e){}
 	}
@@ -62,21 +63,21 @@ public final class ReferClass extends AbstractReferCode{
 		return (CompilationUnit) TreeParsers.parse(Paths.get(this.mFilePath));
 	}
 
-	private void onCalculateTF() {
-		mClassVisitor.calculateTermFrequency(mTfIdf);
+	private void onCalculateTFIDF() {
+		mClassVisitor.calculateTfIdf(mTfIdf);
 	}
 	
 	private void onInferTopics(){
-		mClassVisitor.inferTopics(this.mLDATopics, LDAHelper.LDAModel.ALL);
+		mClassVisitor.inferTopics(this.mLDATopics, ModelHelper.LDAModel.ALL);
 		
 		System.out.println("path: " + this.mFilePath);
 		System.out.println(SourceCode.representationOf(" ", mLDATopics.toArray(new String[mLDATopics.size()])));
 		System.out.println("");
 	}
 	
-	public boolean containsWord(String word){
-		return this.mTfIdf.containsKey(word);
-	}
+//	public boolean containsWord(String word){
+//		return this.mTfIdf.containsKey(word);
+//	}
 	
 	public void addMethod(ReferMethod method){
 		this.mMethods.add(method);

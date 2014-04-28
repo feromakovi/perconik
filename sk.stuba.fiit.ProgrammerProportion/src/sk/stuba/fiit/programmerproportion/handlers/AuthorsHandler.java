@@ -1,5 +1,6 @@
 package sk.stuba.fiit.programmerproportion.handlers;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -12,6 +13,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -26,12 +28,18 @@ import sk.stuba.fiit.programmerproportion.models.ReferAuthor;
 import sk.stuba.fiit.programmerproportion.models.ReferClass;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
 import sk.stuba.fiit.programmerproportion.models.TfIdf;
+import sk.stuba.fiit.programmerproportion.utils.ModelHelper;
 
 public class AuthorsHandler extends AbstractHandler{
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		Shell shell = HandlerUtil.getActiveShell(event);
+		FileDialog fd = new FileDialog(shell);
+		fd.open();
+		System.out.println(fd.getFilterPath() + File.separator + fd.getFileName());
+		ModelHelper.BASE_PATH = fd.getFilterPath();
+		ModelHelper.initIDF();
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
 	    IWorkbenchPage activePage = window.getActivePage();
 	    ISelection selection = activePage.getSelection();
@@ -63,24 +71,6 @@ public class AuthorsHandler extends AbstractHandler{
 				}
 			}
 		});
-	    System.out.println("Calculating IDF");
-	    final Collection<ReferClass> classes = DataProvider.getInstance().getClasses();
-	    final int documentsCount = classes.size();
-	    for(ReferClass c : classes){
-	    	Iterator<String> classTerms = c.getTfIdfMap().keySet().iterator();
-	    	while(classTerms.hasNext()){
-	    		String word = classTerms.next();
-	    		int count = 0;
-	    		for(ReferClass n : classes)
-	    			if(n.containsWord(word))
-	    				count++;
-	    		c.getTfIdfMap().get(word).setIDF(count, documentsCount);
-	    	}
-	    	System.out.println("Class " + c.toString());
-	    	for(TfIdf i : c.getTfIdfs())
-	    		System.out.println(i.toString());
-	    }
-	    
 	    System.out.println("Write programmers knowledges, authors count: " + DataProvider.getInstance().getAuthors().size());
 	    for(ReferAuthor a : DataProvider.getInstance().getAuthors())
 	    	System.out.println(a.toString());
