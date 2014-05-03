@@ -24,9 +24,14 @@ public final class ReferClass extends AbstractReferCode{
 	private final List<ReferMethod> mMethods = new ArrayList<ReferMethod>();
 	
 	/*
-	 * Collection of LDA topics infered from method by included LDAModel
+	 * Collection of LDA topics infered from method by included LDAModel with all words
 	 */
-	private final List<String> mLDATopics = new ArrayList<String>();
+	private final List<String> mLDATopicsAll = new ArrayList<String>();
+	
+	/*
+	 * Collection of LDA topics infered from method by included LDAModel with removed the most often words
+	 */
+	private final List<String> mLDATopicsNoOften = new ArrayList<String>();
 	
 	/*
 	 * String representation of file location
@@ -68,11 +73,13 @@ public final class ReferClass extends AbstractReferCode{
 	}
 	
 	private void onInferTopics(){
-		mClassVisitor.inferTopics(this.mLDATopics, ModelHelper.LDAModel.ALL);
+		mClassVisitor.inferTopics(this.mLDATopicsAll, ModelHelper.LDAModel.ALL);
 		
 		System.out.println("path: " + this.mFilePath);
-		System.out.println(SourceCode.representationOf(" ", mLDATopics.toArray(new String[mLDATopics.size()])));
+		System.out.println(SourceCode.representationOf(" ", mLDATopicsAll.toArray(new String[mLDATopicsAll.size()])));
 		System.out.println("");
+		
+		mClassVisitor.inferTopics(this.mLDATopicsNoOften, ModelHelper.LDAModel.OFTEN_REMOVED);
 	}
 	
 //	public boolean containsWord(String word){
@@ -102,13 +109,10 @@ public final class ReferClass extends AbstractReferCode{
 	
 	public Map<String, TfIdf> getTfIdfMap(){return this.mTfIdf;}
 	public List<ReferMethod> getMethods(){return this.mMethods;}
-	public List<String> getTopics(){return this.mLDATopics;}
 	
-	public List<TfIdf> getTfIdfs(){
-		List<TfIdf> list = new ArrayList<>(this.mTfIdf.values());
-		Collections.sort(list);
-		return list;
-	}
+	public List<String> getAllLDATopics(){return this.mLDATopicsAll;}
+	public List<String> getNoOftenLDATopics(){return this.mLDATopicsNoOften;}
+	public List<TfIdf> getTfIdfs(){return ModelHelper.extractTfIdf(this.mTfIdf.values());}
 	
 	@Override
 	public String toString() {

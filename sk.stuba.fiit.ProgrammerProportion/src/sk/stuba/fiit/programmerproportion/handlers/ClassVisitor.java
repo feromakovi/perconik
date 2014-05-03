@@ -17,6 +17,9 @@ import sk.stuba.fiit.programmerproportion.utils.StopWords;
 
 public class ClassVisitor extends ASTVisitor{
 	
+	/*
+	 * All java class tokens without java syntax words and without stop words
+	 */
 	private List<String> mTokens = new ArrayList<String>();
 
 	@Override

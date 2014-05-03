@@ -11,17 +11,26 @@ public class ReferAuthor extends AbstractReferCode {
 	
 	private String mID;
 	
-	private final Map<String, Integer> mTopicsToContribution = new HashMap<String, Integer>();
+	/*
+	 * Topics collections mapping the topic term to count of lines of code
+	 */	
+	private final Map<String, Integer> mAllLDA = new HashMap<String, Integer>();
+	private final Map<String, Integer> mNoOftenLDA = new HashMap<String, Integer>();
+	private final Map<String, Integer> mTfIdf = new HashMap<String, Integer>();
 	
 	public ReferAuthor(String author){
 		this.mID = author;
 	}
 	
 	public void updateTopics(String topic, Integer linesCount){
-		if(mTopicsToContribution.containsKey(topic))
-			mTopicsToContribution.put(topic, mTopicsToContribution.get(topic) + linesCount);
+		updateTopicMaps(topic, linesCount, this.mAllLDA);
+	}
+	
+	private static void updateTopicMaps(String topic, Integer linesCount, Map<String, Integer> map){
+		if(map.containsKey(topic))
+			map.put(topic, map.get(topic) + linesCount);
 		else
-			mTopicsToContribution.put(topic, linesCount);
+			map.put(topic, linesCount);
 	}
 
 	@Override
@@ -36,12 +45,19 @@ public class ReferAuthor extends AbstractReferCode {
 	
 	@Override
 	public String toString() {
-		StringBuilder b = new StringBuilder();
-		b = b.append("======== ").append(this.mID).append(" ========").append("\n");
-		List<Term> terms = Term.fromHashMap(mTopicsToContribution);
-		Collections.sort(terms);
-		for(Term t : terms)
-			b = b.append("	").append(t.getWord()).append(":").append(t.getValue()).append("\n");
-		return b.toString();
+		return ""; 
+//		StringBuilder b = new StringBuilder();
+//		b = b.append("======== ").append(this.mID).append(" ========").append("\n");
+//		List<Term> terms = Term.fromHashMap(mTopicsToContribution);
+//		Collections.sort(terms);
+//		for(Term t : terms)
+//			b = b.append("	").append(t.getWord()).append(":").append(t.getValue()).append("\n");
+//		return b.toString();
+	}
+
+	public void updateByClass(ReferClass clas, Integer lCount) {
+		for(String s : clas.getAllLDATopics()) updateTopicMaps(s, lCount, mAllLDA);
+		for(String s : clas.getNoOftenLDATopics()) updateTopicMaps(s, lCount, mNoOftenLDA);
+		for(TfIdf t : clas.getTfIdfs()) updateTopicMaps(t.getWord(), lCount, this.mTfIdf);
 	}
 }

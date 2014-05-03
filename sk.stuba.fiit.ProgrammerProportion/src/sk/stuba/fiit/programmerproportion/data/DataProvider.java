@@ -128,8 +128,9 @@ public final class DataProvider {
 			ReferAuthor refAuth = getAuthor(authRep);
 			if(refAuth == null)
 				refAuth = addAuthor(new ReferAuthor(authRep));
-			for(String t : clas.getTopics())
-				refAuth.updateTopics(t, lCount);
+			refAuth.updateByClass(clas, lCount);
+//			for(String t : clas.getAllLDATopics())
+//				refAuth.updateTopics(t, lCount);
 		}
 	}
 	

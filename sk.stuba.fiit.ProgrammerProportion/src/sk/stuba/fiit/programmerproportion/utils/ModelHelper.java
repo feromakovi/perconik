@@ -2,16 +2,20 @@ package sk.stuba.fiit.programmerproportion.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import jgibblda.Inferencer;
 import jgibblda.LDACmdOption;
 import jgibblda.Model;
+import sk.stuba.fiit.programmerproportion.models.TfIdf;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -19,14 +23,17 @@ import com.google.common.io.LineProcessor;
 
 public class ModelHelper {
 	
-	public static String BASE_PATH = null;
-	public static int IDF_DOCUMENTS_COUNT = 0;
+	private static final int MAX_LDA_TOPIC_TERMS = 8;
+	private static final int MAX_TFIDF_TOPICS_TERMS = MAX_LDA_TOPIC_TERMS;
 	
 	private static final String LDA_MODEL_NAME = "model-final";
 	private static final String TFIDF_MODEL_NAME = "words.txt";
 	
 	private static final String FOLDER_ALL = "all";
 	private static final String FOLDER_WITHOUT_OFTEN = "without_often";
+	
+	public static String BASE_PATH = null;
+	public static int IDF_DOCUMENTS_COUNT = 0;
 	
 	private static final Map<String, Integer> IDF_MODEL = new HashMap<String, Integer>();
 	
@@ -44,10 +51,8 @@ public class ModelHelper {
 		};
 	}
 	
-	private static final int MAX_TOPIC_TERMS = 8;
-	
 	public static final Collection<String> inference(final String[] words, final LDAModel model){
-		return inference(words, model, MAX_TOPIC_TERMS);
+		return inference(words, model, MAX_LDA_TOPIC_TERMS);
 	}
 	
 	public static final Collection<String> inference(final String[] words, final LDAModel model, int maxTopicsCount){
@@ -111,5 +116,11 @@ public class ModelHelper {
 		if(IDF_MODEL.containsKey(word))
 			return IDF_MODEL.get(word);
 		return 1;
+	}
+	
+	public static List<TfIdf> extractTfIdf(Collection<TfIdf> collection){
+		List<TfIdf> list = new ArrayList<>(collection);
+		Collections.sort(list);
+		return list.subList(0, MAX_TFIDF_TOPICS_TERMS - 1);
 	}
 }
