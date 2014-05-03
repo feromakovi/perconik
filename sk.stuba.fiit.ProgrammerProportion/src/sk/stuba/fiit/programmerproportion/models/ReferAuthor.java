@@ -18,6 +18,11 @@ public class ReferAuthor extends AbstractReferCode {
 	private final Map<String, Integer> mNoOftenLDA = new HashMap<String, Integer>();
 	private final Map<String, Integer> mTfIdf = new HashMap<String, Integer>();
 	
+	/*
+	 * Map of packagename-class name to count of lines of code extracted from every method where author has participated
+	 */
+	private final Map<String, Integer> mTechnologies = new HashMap<String, Integer>();
+	
 	public ReferAuthor(String author){
 		this.mID = author;
 	}
@@ -59,5 +64,13 @@ public class ReferAuthor extends AbstractReferCode {
 		for(String s : clas.getAllLDATopics()) updateTopicMaps(s, lCount, mAllLDA);
 		for(String s : clas.getNoOftenLDATopics()) updateTopicMaps(s, lCount, mNoOftenLDA);
 		for(TfIdf t : clas.getTfIdfs()) updateTopicMaps(t.getWord(), lCount, this.mTfIdf);
+		for(ReferMethod m : clas.getMethods()){
+			Map<String, Integer> methodContributors = m.getContributors();
+			if(methodContributors.containsKey(mID)){
+				int mMethodLines = methodContributors.get(mID);
+				for(InvokedMethod i : m.getInvokedMethods())
+					updateTopicMaps(i.getPath(), mMethodLines, this.mTechnologies);
+			}
+		}
 	}
 }

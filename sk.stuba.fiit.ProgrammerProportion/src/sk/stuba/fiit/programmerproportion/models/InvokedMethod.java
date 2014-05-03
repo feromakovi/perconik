@@ -31,6 +31,16 @@ public final class InvokedMethod extends AbstractReferCode{
 		return this.mName;
 	}
 	
+	@Override
+	public String toString() {
+		return Strings.representationOf(mPackage, mClass);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Strings.representationOf(mPackage, mClass).hashCode();
+	}
+	
 	public String getPath(){
 		return Strings.representationOf(mPackage, mClass);
 	}
