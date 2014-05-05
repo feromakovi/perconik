@@ -55,14 +55,14 @@ public class ReferAuthor extends AbstractReferCode {
 	
 	@Override
 	public String toString() {
-		return ""; 
-//		StringBuilder b = new StringBuilder();
-//		b = b.append("======== ").append(this.mID).append(" ========").append("\n");
-//		List<Term> terms = Term.fromHashMap(mTopicsToContribution);
-//		Collections.sort(terms);
-//		for(Term t : terms)
-//			b = b.append("	").append(t.getWord()).append(":").append(t.getValue()).append("\n");
-//		return b.toString();
+		StringBuilder b = new StringBuilder();
+		b = b.append("======== ").append(this.mID).append(" ========").append("\n");
+		List<Term> terms = Term.fromHashMap(mNoOftenLDA);
+		Collections.sort(terms);
+		for(Term t : terms)
+			b = b.append("	").append(t.getWord()).append(":").append(t.getValue()).append("\n");
+		b.append("\n").append("familiarity: AllLDA ").append(mFamiliarityAllLDA).append("NoOftenLDA ").append(mFamiliarityNoOftenLDA);
+		return b.toString();
 	}
 
 	public void updateByClass(ReferClass clas, Integer lCount) {

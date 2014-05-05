@@ -41,6 +41,6 @@ public final class TfIdf implements Comparable<TfIdf>{
 	
 	@Override
 	public String toString() {
-		return "	" + mWord + ": " + calculateTfIdf();		
+		return mWord;		
 	}
 }

@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
+import sk.stuba.fiit.programmerproportion.utils.Log;
 import sk.stuba.fiit.programmerproportion.utils.SourceCode;
 import sk.stuba.fiit.programmerproportion.utils.Strings;
 
@@ -37,6 +38,7 @@ public final class ReferMethod extends AbstractReferCode{
 		this.mClass = mclass;
 		this.mPackage = mpackage;
 		this.mComplexity = this.onCalculateComplexity(codeBlock);
+		Log.println(getStringRepresentation() + mComplexity);
 		for(MethodInvocation m : iMethods){
 			InvokedMethod im = InvokedMethod.from(m);
 			if(im != null)

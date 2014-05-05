@@ -114,4 +114,9 @@ public class CodeComplexity {
 			--actualNest;
 		}			
 	}
+	
+	@Override
+	public String toString() {
+		return "cType: " + mTypesCount + " cInvoked: " + mInvokedMethodsCount + " cLine: " + mLinesCount + " mDepth: " + mMaxDepth + " CC: " + mCyclomaticComplexity;
+	}
 }
