@@ -28,7 +28,9 @@ import sk.stuba.fiit.programmerproportion.models.ReferAuthor;
 import sk.stuba.fiit.programmerproportion.models.ReferClass;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
 import sk.stuba.fiit.programmerproportion.models.TfIdf;
+import sk.stuba.fiit.programmerproportion.utils.Log;
 import sk.stuba.fiit.programmerproportion.utils.ModelHelper;
+import sk.stuba.fiit.programmerproportion.utils.ModelHelper.LDAModel;
 
 public class AuthorsHandler extends AbstractHandler{
 
@@ -37,7 +39,7 @@ public class AuthorsHandler extends AbstractHandler{
 		Shell shell = HandlerUtil.getActiveShell(event);
 		FileDialog fd = new FileDialog(shell);
 		fd.open();
-		System.out.println(fd.getFilterPath() + File.separator + fd.getFileName());
+		Log.init(fd.getFilterPath() + File.separator + fd.getFileName());
 		ModelHelper.BASE_PATH = fd.getFilterPath();
 		ModelHelper.initIDF();
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
@@ -58,7 +60,7 @@ public class AuthorsHandler extends AbstractHandler{
 	      MessageDialog.openInformation(shell, "Info",
 	          "Please select a Java source file");
 	    }
-	    System.out.println("Assign authors to methods and invoked number");
+	    Log.println("Assign authors to methods and invoked number");
 	    DataProvider.getInstance().iterate(new IterationListener() {
 			
 			@Override
@@ -71,23 +73,27 @@ public class AuthorsHandler extends AbstractHandler{
 				}
 			}
 		});
-	    System.out.println("Write programmers knowledges, authors count: " + DataProvider.getInstance().getAuthors().size());
-	    for(ReferAuthor a : DataProvider.getInstance().getAuthors())
-	    	System.out.println(a.toString());
+	    final Collection<String> aInferenced = DataProvider.getInstance().inferenceProject(LDAModel.ALL);
+	    final Collection<String> orInferenced = DataProvider.getInstance().inferenceProject(LDAModel.OFTEN_REMOVED);
+	    Log.println("Write programmers knowledges, authors count: " + DataProvider.getInstance().getAuthors().size());
+	    for(ReferAuthor a : DataProvider.getInstance().getAuthors()){
+	    	a.onCalculateFamiliarity(aInferenced, orInferenced);
+	    	Log.println(a.toString());
+	    }
 	    
-	    System.out.println("Finito");
-//	    System.out.println("Invoked numbers to all methods assigned");
+//	    Log.println("Invoked numbers to all methods assigned");
 //	    DataProvider.getInstance().iterate(new IterationListener() {
 //			
 //			@Override
 //			public void onIterate(ReferMethod method) {
 //				if(method.hasAuthor())
-//					System.out.println("author: " + method.getAuthor() + "  invocation count: " + method.getInvocationCount() + "  desc: " + method.getStringRepresentation());
+//					Log.println("author: " + method.getAuthor() + "  invocation count: " + method.getInvocationCount() + "  desc: " + method.getStringRepresentation());
 //			}
 //		});
 	    
 	    //tu si mozem prejst svojim zoznamom triedy ktore maju topics a refer methody
-	    //System.out.println(DataProvider.getInstance().toString());
+	    //Log.println(DataProvider.getInstance().toString());
+	    MessageDialog.openInformation(shell, "Info", "Hotovo");
 	    return null;
 	  }
 

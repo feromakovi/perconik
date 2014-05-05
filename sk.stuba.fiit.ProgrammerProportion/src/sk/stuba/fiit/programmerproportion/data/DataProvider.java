@@ -1,5 +1,6 @@
 package sk.stuba.fiit.programmerproportion.data;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,6 +10,8 @@ import java.util.Map;
 import sk.stuba.fiit.programmerproportion.models.ReferAuthor;
 import sk.stuba.fiit.programmerproportion.models.ReferClass;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
+import sk.stuba.fiit.programmerproportion.utils.ModelHelper;
+import sk.stuba.fiit.programmerproportion.utils.ModelHelper.LDAModel;
 
 public final class DataProvider {
 	
@@ -142,5 +145,16 @@ public final class DataProvider {
 	
 	public Collection<ReferAuthor> getAuthors(){
 		return this.mAuthors.values();
+	}
+	
+	public Collection<String> inferenceProject(LDAModel model){
+		List<String> allWords = new ArrayList<String>();
+		for(ReferClass c : mClasses.values()){
+			if(model == LDAModel.ALL)
+				allWords.addAll(c.getAllWords());
+			else
+				allWords.addAll(c.getAllWordsNoOften());
+		}
+		return ModelHelper.inference(allWords.toArray(new String[allWords.size()]), model, ModelHelper.MAX_PROJECT_TERMS_COUNT);
 	}
 }

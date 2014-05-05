@@ -23,6 +23,8 @@ import com.google.common.io.LineProcessor;
 
 public class ModelHelper {
 	
+	public static final int MAX_PROJECT_TERMS_COUNT = 50;
+	
 	private static final int MAX_LDA_TOPIC_TERMS = 8;
 	private static final int MAX_TFIDF_TOPICS_TERMS = MAX_LDA_TOPIC_TERMS;
 	
@@ -56,18 +58,12 @@ public class ModelHelper {
 	}
 	
 	public static final Collection<String> inference(final String[] words, final LDAModel model, int maxTopicsCount){
-//		String modelPath = null;
-//		try{
-//			Bundle bundle = Platform.getBundle("sk.stuba.fiit.ProgrammerProportion");
-//			URL folderURL = bundle.getEntry("model");
-//			modelPath = FileLocator.resolve(folderURL).getPath() + File.separator;	
-//		}catch(Exception e){}	
-		System.out.println("from inferencing model path: " + model.getPath());
+		Log.println("from inferencing model path: " + model.getPath());
 		LDACmdOption ldaOption = new LDACmdOption(); 
 		ldaOption.inf = true; 
 		ldaOption.dir = model.getPath();
 		ldaOption.modelName = LDA_MODEL_NAME; 
-		ldaOption.niters = 100;
+		ldaOption.niters = 500;
 		Inferencer inferencer = new Inferencer(); 
 		inferencer.init(ldaOption);
 		Model m = inferencer.inference(words);
@@ -105,7 +101,7 @@ public class ModelHelper {
 				}
 			};		
 			Files.readLines(words, Charsets.UTF_8, lineProcessor);
-			System.out.println("IDF model loaded successfully");
+			Log.println("IDF model loaded successfully");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

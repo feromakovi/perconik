@@ -70,7 +70,7 @@ public class ClassVisitor extends ASTVisitor{
 		return this.mTokens;
 	}
 	
-	private String[] getTokensWithoutOften(){
+	public String[] getTokensWithoutOften(){
 		return SourceCode.removeSet(SourceCode.representationOf(" ", mTokens.toArray(new String[mTokens.size()])), StopWords.OFTEN, true).split(" ");
 	}
 	

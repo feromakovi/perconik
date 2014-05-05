@@ -1,10 +1,12 @@
 package sk.stuba.fiit.programmerproportion.models;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sk.stuba.fiit.programmerproportion.utils.Strings;
 import jgibblda.Model.Term;
 
 public class ReferAuthor extends AbstractReferCode {
@@ -17,6 +19,9 @@ public class ReferAuthor extends AbstractReferCode {
 	private final Map<String, Integer> mAllLDA = new HashMap<String, Integer>();
 	private final Map<String, Integer> mNoOftenLDA = new HashMap<String, Integer>();
 	private final Map<String, Integer> mTfIdf = new HashMap<String, Integer>();
+	
+	private double mFamiliarityAllLDA = -1;
+	private double mFamiliarityNoOftenLDA = -1;
 	
 	/*
 	 * Map of packagename-class name to count of lines of code extracted from every method where author has participated
@@ -72,5 +77,11 @@ public class ReferAuthor extends AbstractReferCode {
 					updateTopicMaps(i.getPath(), mMethodLines, this.mTechnologies);
 			}
 		}
+	}
+
+	public void onCalculateFamiliarity(Collection<String> aInferenced,
+			Collection<String> orInferenced) {
+		this.mFamiliarityAllLDA = Strings.equalsCollections(mAllLDA.keySet(), aInferenced);
+		this.mFamiliarityNoOftenLDA = Strings.equalsCollections(mNoOftenLDA.keySet(), orInferenced);
 	}
 }

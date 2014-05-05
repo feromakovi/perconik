@@ -1,6 +1,10 @@
 package sk.stuba.fiit.programmerproportion.utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
@@ -32,6 +36,14 @@ public final class Strings {
 		return builder.toString();
 	}
 	
+	public static final double equalsCollections(Set<String> set, Collection<String> aInferenced){
+		int hit = 0;
+		for(String s : aInferenced)
+			if(set.contains(s))
+				hit++;
+		return ((double)hit / Math.max(set.size(), aInferenced.size()));
+	}
+	
 //	public static final String representationOf(final String delimiter, final String... strings){
 //		StringBuilder builder = new StringBuilder();
 //		for(int i = 0; i < strings.length; i++){
@@ -47,8 +59,13 @@ public final class Strings {
 //	}
 	
 	public static void main(String... args) throws IOException{
-		String absoluteDir = "/Users/feromakovi/Dropbox/WorkspaceJava/wikiparser/";
-		String absoluteFile = "/Users/feromakovi/Dropbox/WorkspaceJava/wikiparser/src/sk/feromakovi/wikiparser/exception/BreakParsingException.java";
-		System.out.println(makeRelativePath(absoluteDir, absoluteFile));
+//		String absoluteDir = "/Users/feromakovi/Dropbox/WorkspaceJava/wikiparser/";
+//		String absoluteFile = "/Users/feromakovi/Dropbox/WorkspaceJava/wikiparser/src/sk/feromakovi/wikiparser/exception/BreakParsingException.java";
+//		Log.println(makeRelativePath(absoluteDir, absoluteFile));
+		Set<String> set = new HashSet<String>();
+		set.add("one");set.add("two");set.add("three");set.add("four");set.add("five");
+		Collection<String> col = new ArrayList<String>();
+		col.add("one");col.add("two");col.add("three");col.add("four");
+		System.out.println(equalsCollections(set, col));
 	}
 }

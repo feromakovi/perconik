@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import sk.stuba.fiit.perconik.core.java.dom.TreeParsers;
 import sk.stuba.fiit.programmerproportion.handlers.ClassVisitor;
+import sk.stuba.fiit.programmerproportion.utils.Log;
 import sk.stuba.fiit.programmerproportion.utils.ModelHelper;
 import sk.stuba.fiit.programmerproportion.utils.SourceCode;
 
@@ -54,7 +55,7 @@ public final class ReferClass extends AbstractReferCode{
 	private final ClassVisitor mClassVisitor = new ClassVisitor();	
 	
 	public ReferClass(final String filePath) {
-		System.out.println("loaded " + filePath);
+		Log.println("loaded " + filePath);
 		this.mFilePath = filePath;
 		try{
 			CompilationUnit compilationUnit = onCreateCompilationUnit();
@@ -75,9 +76,9 @@ public final class ReferClass extends AbstractReferCode{
 	private void onInferTopics(){
 		mClassVisitor.inferTopics(this.mLDATopicsAll, ModelHelper.LDAModel.ALL);
 		
-		System.out.println("path: " + this.mFilePath);
-		System.out.println(SourceCode.representationOf(" ", mLDATopicsAll.toArray(new String[mLDATopicsAll.size()])));
-		System.out.println("");
+		Log.println("path: " + this.mFilePath);
+		Log.println(SourceCode.representationOf(" ", mLDATopicsAll.toArray(new String[mLDATopicsAll.size()])));
+		Log.println("");
 		
 		mClassVisitor.inferTopics(this.mLDATopicsNoOften, ModelHelper.LDAModel.OFTEN_REMOVED);
 	}
@@ -109,6 +110,12 @@ public final class ReferClass extends AbstractReferCode{
 	
 	public Map<String, TfIdf> getTfIdfMap(){return this.mTfIdf;}
 	public List<ReferMethod> getMethods(){return this.mMethods;}
+	public List<String> getAllWords(){return mClassVisitor.getTokens();}
+	public List<String> getAllWordsNoOften(){
+		List<String> list = new ArrayList<String>();
+		for(String s : mClassVisitor.getTokensWithoutOften()) list.add(s);
+		return list;
+	}
 	
 	public List<String> getAllLDATopics(){return this.mLDATopicsAll;}
 	public List<String> getNoOftenLDATopics(){return this.mLDATopicsNoOften;}
