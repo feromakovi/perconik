@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>PerConIK Eclipse Integration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Pavol Zbell" />
+    <link href="../stylesheets/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/layout.css" rel="stylesheet" type="text/css" media="all" />
+    <!--[if lt IE 9]>
+      <script src="javascripts/html5shiv.js"></script>
+      <script src="javascripts/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+      var returnval = 0;
+      var stylesheet, xmlFile, cache, doc;
+      function init(){
+        // NSCP 7.1+ / Mozilla 1.4.1+ / Safari
+        // Use the standard DOM Level 2 technique, if it is supported
+        if (document.implementation && document.implementation.createDocument) {
+          xmlFile = document.implementation.createDocument("", "", null);
+          stylesheet = document.implementation.createDocument("", "", null);
+          if (xmlFile.load){
+            xmlFile.load("site.xml");
+            stylesheet.load("resources/site.xsl");
+          } else {
+            alert("Document could not be loaded by the browser (support for Chrome in progress). Anyway, all information presented here can be viewed directly in Eclipse too.");
+          }
+          xmlFile.addEventListener("load", transform, false);
+          stylesheet.addEventListener("load", transform, false);
+        }
+        //IE 6.0+ solution
+        else if (window.ActiveXObject) {
+          xmlFile = new ActiveXObject("msxml2.DOMDocument.3.0");
+          xmlFile.async = false;
+          xmlFile.load("site.xml");
+          stylesheet = new ActiveXObject("msxml2.FreeThreadedDOMDocument.3.0");
+          stylesheet.async = false;
+          stylesheet.load("resources/site.xsl");
+          cache = new ActiveXObject("msxml2.XSLTemplate.3.0");
+          cache.stylesheet = stylesheet;
+          transformData();
+        }
+      }
+      // separate transformation function for IE 6.0+
+      function transformData(){
+        var processor = cache.createProcessor();
+        processor.input = xmlFile;
+        processor.transform();
+        data.innerHTML = processor.output;
+      }
+      // separate transformation function for NSCP 7.1+ and Mozilla 1.4.1+ 
+      function transform(){
+        returnval+=1;
+        if (returnval==2){
+          var processor = new XSLTProcessor();
+          processor.importStylesheet(stylesheet); 
+          doc = processor.transformToDocument(xmlFile);
+          document.getElementById("data").innerHTML = doc.documentElement.innerHTML;
+        }
+      }
+    </script>
+  </head>
+  <body onload="init();">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+          <section id="data">
+          </section>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

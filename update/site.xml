@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Analyser programmer's knowledges" url="http://feromakovi.github.io/perconik/update">
+      Analyser programmer's knowledges.
+   </description>
+   <feature url="features/sk.stuba.fiit.perconik.feature_0.1.5.v20131112-1828.jar" id="sk.stuba.fiit.perconik.feature" version="0.0.0">
+      <category name="feromakovi"/>
+   </feature>
+   <feature url="features/sk.stuba.fiit.ProgrammerProportion.feature_1.0.0.201404291534.jar" id="sk.stuba.fiit.ProgrammerProportion.feature" version="1.0.0.qualifier">
+      <category name="feromakovi"/>
+   </feature>
+   <category-def name="feromakovi" label="Models_category"/>
+</site>
