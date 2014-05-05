@@ -31,6 +31,7 @@ import sk.stuba.fiit.programmerproportion.models.TfIdf;
 import sk.stuba.fiit.programmerproportion.utils.Log;
 import sk.stuba.fiit.programmerproportion.utils.ModelHelper;
 import sk.stuba.fiit.programmerproportion.utils.ModelHelper.LDAModel;
+import sk.stuba.fiit.programmerproportion.utils.Strings;
 
 public class AuthorsHandler extends AbstractHandler{
 
@@ -39,7 +40,7 @@ public class AuthorsHandler extends AbstractHandler{
 		Shell shell = HandlerUtil.getActiveShell(event);
 		FileDialog fd = new FileDialog(shell);
 		fd.open();
-		Log.init(fd.getFilterPath() + File.separator + fd.getFileName());
+		Log.init(fd.getFilterPath(), fd.getFileName());
 		ModelHelper.BASE_PATH = fd.getFilterPath();
 		ModelHelper.initIDF();
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
@@ -75,6 +76,9 @@ public class AuthorsHandler extends AbstractHandler{
 		});
 	    final Collection<String> aInferenced = DataProvider.getInstance().inferenceProject(LDAModel.ALL);
 	    final Collection<String> orInferenced = DataProvider.getInstance().inferenceProject(LDAModel.OFTEN_REMOVED);
+	    Log.get().println(Log.FOLDER_FAMILIARITY, "projectLDA_All.txt", Strings.collectionToString(aInferenced));
+	    Log.get().println(Log.FOLDER_FAMILIARITY, "projectLDA_NoOften.txt", Strings.collectionToString(orInferenced));
+	    
 	    Log.println("Write programmers knowledges, authors count: " + DataProvider.getInstance().getAuthors().size());
 	    for(ReferAuthor a : DataProvider.getInstance().getAuthors()){
 	    	a.onCalculateFamiliarity(aInferenced, orInferenced);

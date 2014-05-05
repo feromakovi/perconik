@@ -44,6 +44,14 @@ public final class Strings {
 		return ((double)hit / Math.max(set.size(), aInferenced.size()));
 	}
 	
+	public static final <T> String collectionToString(Collection<T> col){
+		StringBuilder builder = new StringBuilder();
+		for(T o : col){
+			builder.append(o.toString()).append("\n");
+		}
+		return builder.toString();
+	}
+	
 //	public static final String representationOf(final String delimiter, final String... strings){
 //		StringBuilder builder = new StringBuilder();
 //		for(int i = 0; i < strings.length; i++){

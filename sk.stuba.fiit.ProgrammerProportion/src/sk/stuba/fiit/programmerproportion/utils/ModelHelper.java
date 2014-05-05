@@ -58,7 +58,7 @@ public class ModelHelper {
 	}
 	
 	public static final Collection<String> inference(final String[] words, final LDAModel model, int maxTopicsCount){
-		Log.println("from inferencing model path: " + model.getPath());
+		//Log.println("from inferencing model path: " + model.getPath());
 		LDACmdOption ldaOption = new LDACmdOption(); 
 		ldaOption.inf = true; 
 		ldaOption.dir = model.getPath();
@@ -115,8 +115,8 @@ public class ModelHelper {
 	}
 	
 	public static List<TfIdf> extractTfIdf(Collection<TfIdf> collection){
-		List<TfIdf> list = new ArrayList<>(collection);
+		List<TfIdf> list = new ArrayList<TfIdf>(collection);
 		Collections.sort(list);
-		return list.subList(0, MAX_TFIDF_TOPICS_TERMS - 1);
+		return (list.size() > MAX_TFIDF_TOPICS_TERMS) ? list.subList(0, MAX_TFIDF_TOPICS_TERMS - 1) : list;
 	}
 }

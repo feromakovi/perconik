@@ -72,10 +72,9 @@ public final class ReferClass extends AbstractReferCode{
 	private void onCalculateTFIDF() {
 		mClassVisitor.calculateTfIdf(mTfIdf);
 		
-		Log.println("inference for: " + this.mFilePath);
 		String n = "";
 		for(TfIdf t : mTfIdf.values()) n += t.toString() + " ";
-		Log.print("  extracted tfidf " + n);
+		Log.println("	TF-IDF: " + n);
 	}
 	
 	private void onInferTopics(){
@@ -83,8 +82,8 @@ public final class ReferClass extends AbstractReferCode{
 		mClassVisitor.inferTopics(this.mLDATopicsNoOften, ModelHelper.LDAModel.OFTEN_REMOVED);
 		
 		
-		Log.println("	" + SourceCode.representationOf(" all lda model topics", mLDATopicsAll.toArray(new String[mLDATopicsAll.size()])));
-		Log.println("	" + SourceCode.representationOf(" no often lda model topics", mLDATopicsNoOften.toArray(new String[mLDATopicsNoOften.size()])));
+		Log.println("	ALL-LDA: " + SourceCode.representationOf(" ", mLDATopicsAll.toArray(new String[mLDATopicsAll.size()])));
+		Log.println("	NO-LDA: " + SourceCode.representationOf(" ", mLDATopicsNoOften.toArray(new String[mLDATopicsNoOften.size()])));
 		Log.println("");	
 	}
 	

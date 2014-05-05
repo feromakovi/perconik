@@ -1,13 +1,15 @@
 package sk.stuba.fiit.programmerproportion.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import sk.stuba.fiit.programmerproportion.utils.Strings;
 import jgibblda.Model.Term;
+import sk.stuba.fiit.programmerproportion.utils.Strings;
 
 public class ReferAuthor extends AbstractReferCode {
 	
@@ -61,6 +63,12 @@ public class ReferAuthor extends AbstractReferCode {
 		Collections.sort(terms);
 		for(Term t : terms)
 			b = b.append("	").append(t.getWord()).append(":").append(t.getValue()).append("\n");
+		b = b.append("TECHNOLOGIES");
+		List<Term> techs = Term.fromHashMap(mTechnologies);
+		Collections.sort(techs);
+		for(Term t : techs)
+			b = b.append("	").append(t.getWord()).append(":").append(t.getValue()).append("\n");
+		b = b.append("FAMILIARITY");
 		b.append("\n").append("familiarity: AllLDA ").append(mFamiliarityAllLDA).append("NoOftenLDA ").append(mFamiliarityNoOftenLDA);
 		return b.toString();
 	}
@@ -83,5 +91,45 @@ public class ReferAuthor extends AbstractReferCode {
 			Collection<String> orInferenced) {
 		this.mFamiliarityAllLDA = Strings.equalsCollections(mAllLDA.keySet(), aInferenced);
 		this.mFamiliarityNoOftenLDA = Strings.equalsCollections(mNoOftenLDA.keySet(), orInferenced);
+	}
+	
+	public Collection<P> allLDAToCollection(){
+		return createCollection(this.mAllLDA);
+	}
+	
+	public Collection<P> noOftenLDAToCollection(){
+		return createCollection(this.mNoOftenLDA);
+	}
+	
+	public Collection<P> tfidfToCollection(){
+		return createCollection(this.mTfIdf);
+	}
+	
+	public Collection<P> technologiesLDAToCollection(){
+		return createCollection(this.mTechnologies);
+	}
+	
+	private static Collection<P> createCollection(Map<String, Integer> map){
+		Collection<P> col =  new ArrayList<P>();
+		Iterator<String> keyIterator = map.keySet().iterator();
+		while(keyIterator.hasNext()){
+			String key = keyIterator.next();
+			col.add(new P(key, map.get(key)));
+		}
+		return col;
+	}
+	
+	public static class P{
+		String s;
+		double d;
+		
+		P(String s, double val){
+			this.s = s;this.d = val;
+		}
+		
+		@Override
+		public String toString() {
+			return this.s + " " + this.d;
+		}
 	}
 }
