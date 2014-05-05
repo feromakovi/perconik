@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import jgibblda.Model.Term;
+
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
@@ -45,7 +47,8 @@ public class ClassVisitor extends ASTVisitor{
 			wordsToInfer = getTokensWithoutOften();
 			break;
 		}
-		mLDATopics.addAll(ModelHelper.inference(wordsToInfer, ldaModel));
+		for(Term t : ModelHelper.inference(wordsToInfer, ldaModel))
+			mLDATopics.add(t.getWord());
 	}
 	
 	public void calculateTfIdf(final Map<String, TfIdf> mTfIdf) {

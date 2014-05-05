@@ -719,8 +719,8 @@ public class Model {
 		return true;
 	}
 	
-	public Collection<String> getTopicTerms(final int count){
-		Set<String> topics = new HashSet<String>();
+	public Collection<Term> getTopicTerms(final int count){
+		Set<Term> topics = new HashSet<Term>();
 		try{
 			SortedSet<Term> terms = Collections.synchronizedSortedSet(new TreeSet<Term>());
 			if (twords > V){
@@ -750,7 +750,7 @@ public class Model {
 			Iterator<Term> i = terms.iterator();
 			while(i.hasNext() && topics.size() < count){
 				Term t = i.next();
-				topics.add(t.getWord());
+				topics.add(t);
 			}
 		}
 		catch(Exception e){
@@ -775,7 +775,7 @@ public class Model {
 
 		@Override
 		public String toString() {
-			return this.mWord;
+			return this.mWord + " " + value;
 		}
 		
 		@Override

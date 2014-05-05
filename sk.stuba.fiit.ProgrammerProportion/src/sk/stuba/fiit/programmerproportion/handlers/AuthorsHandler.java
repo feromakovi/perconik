@@ -1,8 +1,8 @@
 package sk.stuba.fiit.programmerproportion.handlers;
 
-import java.io.File;
 import java.util.Collection;
-import java.util.Iterator;
+
+import jgibblda.Model.Term;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -25,9 +25,7 @@ import sk.stuba.fiit.programmerproportion.data.DataProvider.IterationListener;
 import sk.stuba.fiit.programmerproportion.files.JavaUnitFinder;
 import sk.stuba.fiit.programmerproportion.models.InvokedMethod;
 import sk.stuba.fiit.programmerproportion.models.ReferAuthor;
-import sk.stuba.fiit.programmerproportion.models.ReferClass;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
-import sk.stuba.fiit.programmerproportion.models.TfIdf;
 import sk.stuba.fiit.programmerproportion.utils.Log;
 import sk.stuba.fiit.programmerproportion.utils.ModelHelper;
 import sk.stuba.fiit.programmerproportion.utils.ModelHelper.LDAModel;
@@ -74,15 +72,17 @@ public class AuthorsHandler extends AbstractHandler{
 				}
 			}
 		});
-	    final Collection<String> aInferenced = DataProvider.getInstance().inferenceProject(LDAModel.ALL);
-	    final Collection<String> orInferenced = DataProvider.getInstance().inferenceProject(LDAModel.OFTEN_REMOVED);
+	    final Collection<Term> aInferenced = DataProvider.getInstance().inferenceProject(LDAModel.ALL);
+	    final Collection<Term> orInferenced = DataProvider.getInstance().inferenceProject(LDAModel.OFTEN_REMOVED);
 	    Log.get().println(Log.FOLDER_FAMILIARITY, "projectLDA_All.txt", Strings.collectionToString(aInferenced));
 	    Log.get().println(Log.FOLDER_FAMILIARITY, "projectLDA_NoOften.txt", Strings.collectionToString(orInferenced));
 	    
 	    Log.println("Write programmers knowledges, authors count: " + DataProvider.getInstance().getAuthors().size());
 	    for(ReferAuthor a : DataProvider.getInstance().getAuthors()){
-	    	a.onCalculateFamiliarity(aInferenced, orInferenced);
-	    	Log.println(a.toString());
+	    	//a.onCalculateFamiliarity(aInferenced, orInferenced);
+	    	Log.get().print(Log.FOLDER_FAMILIARITY, a.getStringRepresentation() + "_LDA_ALL", Strings.collectionToString(a.allLDAToCollection()));
+	    	Log.get().print(Log.FOLDER_FAMILIARITY, a.getStringRepresentation() + "_LDA_NO", Strings.collectionToString(a.noOftenLDAToCollection()));
+	    	Log.get().print(Log.FOLDER_FAMILIARITY, a.getStringRepresentation() + "_TFIDF", Strings.collectionToString(a.tfidfToCollection()));
 	    }
 	    
 //	    Log.println("Invoked numbers to all methods assigned");

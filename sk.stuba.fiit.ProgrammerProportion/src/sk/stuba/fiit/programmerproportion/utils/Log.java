@@ -57,11 +57,9 @@ public final class Log {
 	private File getFile(String relativePath, String name){
 		try {
 			relativePath = checkPath(relativePath);
-			System.out.println("relative path " + relativePath);
 			File f = new File(relativePath + name);
 			if(!f.exists())
 				f.createNewFile();
-			System.out.println("getFile " + f.getPath());
 			return f;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -72,7 +70,6 @@ public final class Log {
 	private String checkPath(String relativePath){
 		try{
 			File f = new File(mBasePath + File.separator + relativePath);
-			System.out.println("check path: " + mBasePath + File.separator + relativePath + "    exist: " + f.exists());
 			if(!f.exists())
 				f.mkdir();
 			return f.getPath() + File.separator;
@@ -92,8 +89,8 @@ public final class Log {
 	}
 	
 	public static void main(String...strings){
-		Log.init("/Users/feromakovi/Desktop/log", "log.txt");
+		//Log.init("/Users/feromakovi/Desktop/log", "log.txt");
 		//Log.println("ahoj");
-		Log.get().println("techs", "hovno", "nazdar");
+		//Log.get().println("techs", "hovno", "nazdar");
 	}
 }

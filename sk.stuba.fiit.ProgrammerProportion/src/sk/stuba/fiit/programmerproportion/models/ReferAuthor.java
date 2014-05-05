@@ -93,43 +93,27 @@ public class ReferAuthor extends AbstractReferCode {
 		this.mFamiliarityNoOftenLDA = Strings.equalsCollections(mNoOftenLDA.keySet(), orInferenced);
 	}
 	
-	public Collection<P> allLDAToCollection(){
-		return createCollection(this.mAllLDA);
+	public List<Term> allLDAToCollection(){
+		List<Term> terms = Term.fromHashMap(mAllLDA);
+		Collections.sort(terms);
+		return terms;
 	}
 	
-	public Collection<P> noOftenLDAToCollection(){
-		return createCollection(this.mNoOftenLDA);
+	public List<Term> noOftenLDAToCollection(){
+		List<Term> terms = Term.fromHashMap(mNoOftenLDA);
+		Collections.sort(terms);
+		return terms;
 	}
 	
-	public Collection<P> tfidfToCollection(){
-		return createCollection(this.mTfIdf);
+	public List<Term> tfidfToCollection(){
+		List<Term> terms = Term.fromHashMap(mTfIdf);
+		Collections.sort(terms);
+		return terms;
 	}
 	
-	public Collection<P> technologiesLDAToCollection(){
-		return createCollection(this.mTechnologies);
-	}
-	
-	private static Collection<P> createCollection(Map<String, Integer> map){
-		Collection<P> col =  new ArrayList<P>();
-		Iterator<String> keyIterator = map.keySet().iterator();
-		while(keyIterator.hasNext()){
-			String key = keyIterator.next();
-			col.add(new P(key, map.get(key)));
-		}
-		return col;
-	}
-	
-	public static class P{
-		String s;
-		double d;
-		
-		P(String s, double val){
-			this.s = s;this.d = val;
-		}
-		
-		@Override
-		public String toString() {
-			return this.s + " " + this.d;
-		}
+	public List<Term> technologiesToCollection(){
+		List<Term> terms = Term.fromHashMap(mTechnologies);
+		Collections.sort(terms);
+		return terms;
 	}
 }

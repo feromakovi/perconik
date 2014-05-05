@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import jgibblda.Model.Term;
 import sk.stuba.fiit.programmerproportion.models.ReferAuthor;
 import sk.stuba.fiit.programmerproportion.models.ReferClass;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
@@ -147,7 +148,7 @@ public final class DataProvider {
 		return this.mAuthors.values();
 	}
 	
-	public Collection<String> inferenceProject(LDAModel model){
+	public Collection<Term> inferenceProject(LDAModel model){
 		List<String> allWords = new ArrayList<String>();
 		for(ReferClass c : mClasses.values()){
 			if(model == LDAModel.ALL)

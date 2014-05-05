@@ -15,6 +15,7 @@ import java.util.Set;
 import jgibblda.Inferencer;
 import jgibblda.LDACmdOption;
 import jgibblda.Model;
+import jgibblda.Model.Term;
 import sk.stuba.fiit.programmerproportion.models.TfIdf;
 
 import com.google.common.base.Charsets;
@@ -53,11 +54,11 @@ public class ModelHelper {
 		};
 	}
 	
-	public static final Collection<String> inference(final String[] words, final LDAModel model){
+	public static final Collection<Term> inference(final String[] words, final LDAModel model){
 		return inference(words, model, MAX_LDA_TOPIC_TERMS);
 	}
 	
-	public static final Collection<String> inference(final String[] words, final LDAModel model, int maxTopicsCount){
+	public static final Collection<Term> inference(final String[] words, final LDAModel model, int maxTopicsCount){
 		//Log.println("from inferencing model path: " + model.getPath());
 		LDACmdOption ldaOption = new LDACmdOption(); 
 		ldaOption.inf = true; 
