@@ -6,7 +6,7 @@
    <feature url="features/sk.stuba.fiit.perconik.feature_0.1.5.v20131112-1828.jar" id="sk.stuba.fiit.perconik.feature" version="0.0.0">
       <category name="feromakovi"/>
    </feature>
-   <feature url="features/sk.stuba.fiit.ProgrammerProportion.feature_1.0.0.201405060545.jar" id="sk.stuba.fiit.ProgrammerProportion.feature" version="1.0.0.qualifier">
+   <feature url="features/sk.stuba.fiit.ProgrammerProportion.feature_1.0.0.201405061941.jar" id="sk.stuba.fiit.ProgrammerProportion.feature" version="1.0.0.qualifier">
       <category name="feromakovi"/>
    </feature>
    <category-def name="feromakovi" label="Models_category"/>
