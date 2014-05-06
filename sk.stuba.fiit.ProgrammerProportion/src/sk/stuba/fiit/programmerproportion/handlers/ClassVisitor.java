@@ -1,6 +1,7 @@
 package sk.stuba.fiit.programmerproportion.handlers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -47,7 +48,9 @@ public class ClassVisitor extends ASTVisitor{
 			wordsToInfer = getTokensWithoutOften();
 			break;
 		}
-		for(Term t : ModelHelper.inference(wordsToInfer, ldaModel))
+		List<Term> terms = new ArrayList<Term>(ModelHelper.inference(wordsToInfer, ldaModel));
+		Collections.sort(terms);
+		for(Term t : terms)
 			mLDATopics.add(t.getWord());
 	}
 	

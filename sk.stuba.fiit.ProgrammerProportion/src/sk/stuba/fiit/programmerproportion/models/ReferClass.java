@@ -73,7 +73,7 @@ public final class ReferClass extends AbstractReferCode{
 		mClassVisitor.calculateTfIdf(mTfIdf);
 		
 		String n = "";
-		for(TfIdf t : mTfIdf.values()) n += t.toString() + " ";
+		for(TfIdf t : getTfIdfs()) n += t.toString() + " ";
 		Log.println("	TF-IDF: " + n);
 	}
 	

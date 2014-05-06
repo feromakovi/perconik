@@ -1,6 +1,8 @@
 package sk.stuba.fiit.programmerproportion.handlers;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 import jgibblda.Model.Term;
 
@@ -9,6 +11,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -59,11 +62,21 @@ public class AuthorsHandler extends AbstractHandler{
 	      MessageDialog.openInformation(shell, "Info",
 	          "Please select a Java source file");
 	    }
-	    Log.println("Assign authors to methods and invoked number");
+	    //Log.println("Assign authors to methods and invoked number");
 	    DataProvider.getInstance().iterate(new IterationListener() {
 			
 			@Override
 			public void onIterate(ReferMethod method) {
+				Log.get().println(Log.FOLDER_COMPLEXITY, "project", method.getStringRepresentation() + " " + method.getComplexity().toString());
+				final int cLines = method.getComplexity().getLinesCount();
+				Map<String,Integer> contr = method.getContributors();
+				Iterator<String> authorIterator = contr.keySet().iterator();
+				while(authorIterator.hasNext()){
+					String author = authorIterator.next();
+					Log.get().println(Log.FOLDER_COMPLEXITY, author, method.getStringRepresentation() + " " + (double)( (double)contr.get(author) / (double)cLines ));
+					for(InvokedMethod im : method.getInvokedMethods())
+						Log.get().println(Log.FOLDER_TECHNOLOGIES, author + "_METHOD", im.getPath() + " " + method.getStringRepresentation());
+				}
 				method.hasAuthor();
 				for(InvokedMethod im : method.getInvokedMethods()){
 					ReferMethod mapped = DataProvider.getInstance().getReferMethod(im.getPath(), im.getStringRepresentation());
@@ -77,12 +90,13 @@ public class AuthorsHandler extends AbstractHandler{
 	    Log.get().println(Log.FOLDER_FAMILIARITY, "projectLDA_All.txt", Strings.collectionToString(aInferenced));
 	    Log.get().println(Log.FOLDER_FAMILIARITY, "projectLDA_NoOften.txt", Strings.collectionToString(orInferenced));
 	    
-	    Log.println("Write programmers knowledges, authors count: " + DataProvider.getInstance().getAuthors().size());
+	    //Log.println("Write programmers knowledges, authors count: " + DataProvider.getInstance().getAuthors().size());
 	    for(ReferAuthor a : DataProvider.getInstance().getAuthors()){
 	    	//a.onCalculateFamiliarity(aInferenced, orInferenced);
 	    	Log.get().print(Log.FOLDER_FAMILIARITY, a.getStringRepresentation() + "_LDA_ALL", Strings.collectionToString(a.allLDAToCollection()));
 	    	Log.get().print(Log.FOLDER_FAMILIARITY, a.getStringRepresentation() + "_LDA_NO", Strings.collectionToString(a.noOftenLDAToCollection()));
 	    	Log.get().print(Log.FOLDER_FAMILIARITY, a.getStringRepresentation() + "_TFIDF", Strings.collectionToString(a.tfidfToCollection()));
+	    	Log.get().print(Log.FOLDER_TECHNOLOGIES, a.getStringRepresentation() + "_ALL", Strings.collectionToString(a.technologiesToCollection()));
 	    }
 	    
 //	    Log.println("Invoked numbers to all methods assigned");

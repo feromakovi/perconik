@@ -53,6 +53,8 @@ public class CodeComplexity {
 		this.mLinesCount = SourceCode.parseLines(sourceCode.toString()).size();
 	}
 	
+	public int getLinesCount(){return this.mLinesCount;}
+	
 	private class StatementVisitor extends ASTVisitor{
 		
 		int actualNest = 0;
