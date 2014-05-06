@@ -93,7 +93,7 @@ public class AuthorsHandler extends AbstractHandler{
 	    	Log.get().print(Log.FOLDER_FAMILIARITY, a.getStringRepresentation() + "_LDA_NO", Strings.collectionToString(a.noOftenLDAToCollection()));
 	    	Log.get().print(Log.FOLDER_FAMILIARITY, a.getStringRepresentation() + "_TFIDF", Strings.collectionToString(a.tfidfToCollection()));
 	    	Log.get().print(Log.FOLDER_TECHNOLOGIES, a.getStringRepresentation() + "_ALL", Strings.collectionToString(a.technologiesToCollection()));
-	    	Log.get().print(Log.FOLDER_FAMILIARITY, "cosine_" + a.getStringRepresentation(), a.getCosineFamiliarityInfo());
+	    	Log.get().print(Log.FOLDER_FAMILIARITY, "cosine_similarity", a.getCosineFamiliarityInfo());
 	    }
 	    
 //	    Log.println("Invoked numbers to all methods assigned");

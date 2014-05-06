@@ -109,6 +109,6 @@ public class ReferAuthor extends AbstractReferCode {
 	}
 	
 	public String getCosineFamiliarityInfo(){
-		return "ALL_LDA: " + mFamiliarityAllLDA + "\n" + "NO_OFTEN_LDA: " + mFamiliarityNoOftenLDA;
+		return mID + "\n" + "	ALL_LDA: " + mFamiliarityAllLDA + "\n" + "	NO_OFTEN_LDA: " + mFamiliarityNoOftenLDA;
 	}
 }
