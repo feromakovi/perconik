@@ -15,6 +15,7 @@ Bundle-ActivationPolicy: lazy
 Import-Package: com.google.common.io,
  org.eclipse.core.commands,
  org.eclipse.jface.dialogs,
+ org.eclipse.jface.operation,
  org.eclipse.jface.viewers,
  org.eclipse.jgit.api;version="3.0.3",
  org.eclipse.jgit.lib;version="3.0.3",

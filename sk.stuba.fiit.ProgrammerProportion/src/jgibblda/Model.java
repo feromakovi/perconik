@@ -39,15 +39,17 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
 import java.util.Vector;
+
+import sk.stuba.fiit.programmerproportion.utils.Log;
+import sk.stuba.fiit.programmerproportion.utils.ModelHelper;
 
 public class Model {	
 	
@@ -720,12 +722,15 @@ public class Model {
 	}
 	
 	public Collection<Term> getTopicTerms(final int count){
-		Set<Term> topics = new HashSet<Term>();
+		List<Term> terms = new ArrayList<Term>();
 		try{
-			SortedSet<Term> terms = Collections.synchronizedSortedSet(new TreeSet<Term>());
+			Map<String, Term> map = new HashMap<String, Term>();
 			if (twords > V){
 				twords = V;
 			}
+			
+			if(count == ModelHelper.MAX_PROJECT_TERMS_COUNT)
+				Log.println("===================================================");
 			
 			for (int k = 0; k < K; k++){
 				List<Pair> wordsProbsList = new ArrayList<Pair>(); 
@@ -742,21 +747,32 @@ public class Model {
 				for (int i = 0; i < twords; i++){
 					if (data.localDict.contains((Integer)wordsProbsList.get(i).first)){
 						String word = data.localDict.getWord((Integer)wordsProbsList.get(i).first);
-						terms.add(new Term(word, (Double) wordsProbsList.get(i).second));
+						double val = (Double) wordsProbsList.get(i).second;
+						Term t = new Term(word, val);
+						if(map.containsKey(word)){
+							Term u = map.get(word);
+							if(u.getValue() > t.getValue())
+								t = u;
+						}
+						map.put(word, t);
+						
+						if(count == ModelHelper.MAX_PROJECT_TERMS_COUNT)
+							Log.println("term: " + word + " " + val);
 						//System.out.println("\t" + word + " " + wordsProbsList.get(i).second + "\n");
 					}
 				}
 			} //end foreach topic
-			Iterator<Term> i = terms.iterator();
-			while(i.hasNext() && topics.size() < count){
-				Term t = i.next();
-				topics.add(t);
+			if(count == ModelHelper.MAX_PROJECT_TERMS_COUNT){
+				Log.println("===================================================");
+				Log.println("sorted set size: " + map.size());
 			}
+			terms.addAll(map.values());
+			Collections.sort(terms);
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		return topics;
+		return (terms.size() > count) ? terms.subList(0, count - 1) : terms;
 	}	
 	
 	public static class Term implements Comparable<Term>{

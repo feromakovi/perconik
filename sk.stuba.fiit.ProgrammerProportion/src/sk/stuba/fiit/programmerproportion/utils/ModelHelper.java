@@ -24,7 +24,7 @@ import com.google.common.io.LineProcessor;
 
 public class ModelHelper {
 	
-	public static final int MAX_PROJECT_TERMS_COUNT = 50;
+	public static final int MAX_PROJECT_TERMS_COUNT = 100;
 	
 	private static final int MAX_LDA_TOPIC_TERMS = 8;
 	private static final int MAX_TFIDF_TOPICS_TERMS = MAX_LDA_TOPIC_TERMS;
@@ -59,7 +59,6 @@ public class ModelHelper {
 	}
 	
 	public static final Collection<Term> inference(final String[] words, final LDAModel model, int maxTopicsCount){
-		//Log.println("from inferencing model path: " + model.getPath());
 		LDACmdOption ldaOption = new LDACmdOption(); 
 		ldaOption.inf = true; 
 		ldaOption.dir = model.getPath();

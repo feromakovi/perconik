@@ -11,6 +11,7 @@ import jgibblda.Model.Term;
 import sk.stuba.fiit.programmerproportion.models.ReferAuthor;
 import sk.stuba.fiit.programmerproportion.models.ReferClass;
 import sk.stuba.fiit.programmerproportion.models.ReferMethod;
+import sk.stuba.fiit.programmerproportion.utils.Log;
 import sk.stuba.fiit.programmerproportion.utils.ModelHelper;
 import sk.stuba.fiit.programmerproportion.utils.ModelHelper.LDAModel;
 
@@ -156,6 +157,8 @@ public final class DataProvider {
 			else
 				allWords.addAll(c.getAllWordsNoOften());
 		}
+		Log.println("---------------------------");
+		Log.println("All words for inference: " + allWords.size());
 		return ModelHelper.inference(allWords.toArray(new String[allWords.size()]), model, ModelHelper.MAX_PROJECT_TERMS_COUNT);
 	}
 }
