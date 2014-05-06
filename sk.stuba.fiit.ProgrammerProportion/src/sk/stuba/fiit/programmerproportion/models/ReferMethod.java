@@ -12,8 +12,6 @@ import org.eclipse.jdt.core.dom.IPackageBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-
-import sk.stuba.fiit.programmerproportion.utils.Log;
 import sk.stuba.fiit.programmerproportion.utils.Strings;
 
 public final class ReferMethod extends AbstractReferCode{

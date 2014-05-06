@@ -1,15 +1,12 @@
 package sk.stuba.fiit.programmerproportion.models;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import jgibblda.Model.Term;
-import sk.stuba.fiit.programmerproportion.utils.Strings;
+import sk.stuba.fiit.programmerproportion.utils.CosineSimilarity;
 
 public class ReferAuthor extends AbstractReferCode {
 	
@@ -63,11 +60,6 @@ public class ReferAuthor extends AbstractReferCode {
 		Collections.sort(terms);
 		for(Term t : terms)
 			b = b.append("	").append(t.getWord()).append(":").append(t.getValue()).append("\n");
-		b = b.append("TECHNOLOGIES");
-		List<Term> techs = Term.fromHashMap(mTechnologies);
-		Collections.sort(techs);
-		for(Term t : techs)
-			b = b.append("	").append(t.getWord()).append(":").append(t.getValue()).append("\n");
 		b = b.append("FAMILIARITY");
 		b.append("\n").append("familiarity: AllLDA ").append(mFamiliarityAllLDA).append("NoOftenLDA ").append(mFamiliarityNoOftenLDA);
 		return b.toString();
@@ -87,10 +79,9 @@ public class ReferAuthor extends AbstractReferCode {
 		}
 	}
 
-	public void onCalculateFamiliarity(Collection<String> aInferenced,
-			Collection<String> orInferenced) {
-		this.mFamiliarityAllLDA = Strings.equalsCollections(mAllLDA.keySet(), aInferenced);
-		this.mFamiliarityNoOftenLDA = Strings.equalsCollections(mNoOftenLDA.keySet(), orInferenced);
+	public void onCalculateFamiliarity(Collection<Term> aInferenced, Collection<Term> orInferenced) {
+		this.mFamiliarityAllLDA = CosineSimilarity.calculateCosineSimilarity(mAllLDA, aInferenced);
+		this.mFamiliarityNoOftenLDA = CosineSimilarity.calculateCosineSimilarity(mNoOftenLDA, orInferenced);
 	}
 	
 	public List<Term> allLDAToCollection(){
@@ -115,5 +106,9 @@ public class ReferAuthor extends AbstractReferCode {
 		List<Term> terms = Term.fromHashMap(mTechnologies);
 		Collections.sort(terms);
 		return terms;
+	}
+	
+	public String getCosineFamiliarityInfo(){
+		return "ALL_LDA: " + mFamiliarityAllLDA + "\n" + "NO_OFTEN_LDA: " + mFamiliarityNoOftenLDA;
 	}
 }
