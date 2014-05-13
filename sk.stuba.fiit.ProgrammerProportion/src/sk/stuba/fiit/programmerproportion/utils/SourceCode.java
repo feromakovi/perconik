@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import sk.stuba.fiit.programmerproportion.models.ReferMethod;
 import uk.ac.open.crc.intt.IdentifierNameTokeniser;
 import uk.ac.open.crc.intt.IdentifierNameTokeniserFactory;
 
@@ -112,9 +113,21 @@ public final class SourceCode {
 
 	public static void main(String... args) throws IOException{
 		String code = Files.toString(Paths.get("/Users/feromakovi/Desktop/token.j").toFile(), Charset.defaultCharset());
-		String[] tokens = tokenize(code);
+		final String noJavaCode = SourceCode.removeSet(SourceCode.removeSeparators(code), StopWords.JAVA, false); //Not ignore case because of INTT - it won't separate words 
+		String[] tokens = SourceCode.tokenize(noJavaCode);
 		//Model newModel = inference(tokens);
-//		for(String l : tokenize(code))
-//			Log.println(l);
+		for(String l : tokens)
+			System.out.print(l + " ");
+	}
+	
+	public static boolean equals(ReferMethod m1, ReferMethod m2){
+		int e = 0;
+		Set<String> s1 = m1.getLinesSet();
+		Set<String> s2 = m2.getLinesSet();
+		for(String s : s1)
+			if(s2.contains(s))
+				e++;
+		double similarity = (double)((double)e / (double)Math.min(s1.size(), s2.size()));
+		return (similarity >= 0.75);
 	}
 }

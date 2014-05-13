@@ -3,15 +3,18 @@ package sk.stuba.fiit.programmerproportion.models;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.IPackageBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+
 import sk.stuba.fiit.programmerproportion.utils.Strings;
 
 public final class ReferMethod extends AbstractReferCode{
@@ -151,8 +154,7 @@ public final class ReferMethod extends AbstractReferCode{
 	 * @return if the method valid or no
 	 */
 	public boolean isValid(){
-		//TODO: return validity by complexity of method
-		return true;
+		return mComplexity.mLinesCount > 1;
 	}
 	
 	public boolean hasAuthor(){
@@ -192,6 +194,10 @@ public final class ReferMethod extends AbstractReferCode{
 				return;
 			}				
 		}
+	}
+	
+	public Set<String> getLinesSet(){
+		return mLines.keySet();
 	}
 	
 	@Override

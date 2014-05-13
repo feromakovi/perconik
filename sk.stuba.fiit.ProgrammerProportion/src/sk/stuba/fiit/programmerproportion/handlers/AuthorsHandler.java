@@ -57,7 +57,7 @@ public class AuthorsHandler extends AbstractHandler{
 	    try {
 			dialog.run(false, false, new IRunnableWithProgress(){
 			    public void run(IProgressMonitor monitor) {
-			        monitor.beginTask("Some nice progress message here ...", 100);
+			        monitor.beginTask("Get some beer ...", 100);
 			        
 			        if (structuredSelection != null && structuredSelection.getFirstElement() instanceof IJavaProject) {
 				    	DataProvider.getInstance().initialize();
